@@ -1,4 +1,4 @@
-# ZENITH v1.0.0 - Minimalist Media Downloader
+# ZENITH v4.1.3 - Minimalist Media Downloader
 
 ---
 
