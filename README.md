@@ -1,37 +1,94 @@
-ZENITH v4.2.1
+ZENITH
 
 Minimalist Media Downloader for Android
 
-ZENITH is an Android media downloader designed with a focus on simplicity, speed, privacy, and a clean user experience.
+<p align="center">
+  <strong>Simple. Fast. Clean. No Ads.</strong>
+</p><p align="center">
+  A lightweight Android media downloader built to keep downloading simple.
+</p><p align="center">
+  <img src="https://img.shields.io/badge/version-4.2.1-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/platform-Android-green?style=for-the-badge" alt="Platform">
+  <img src="https://img.shields.io/badge/ads-none-success?style=for-the-badge" alt="No Ads">
+  <img src="https://img.shields.io/badge/license-see%20LICENSE-lightgrey?style=for-the-badge" alt="License">
+</p>---
 
-The application supports various popular media platforms through a minimalist interface and provides a built-in download history feature to help users manage previously downloaded media.
+About
+
+ZENITH is a minimalist media downloader for Android designed for users who want a simple and clean way to process media links from multiple popular platforms.
+
+Instead of filling the interface with unnecessary features, ZENITH focuses on what matters: paste a link, process it, download your media, and keep track of your downloads.
+
+The application is designed to be lightweight, straightforward, and free from advertisements.
+
+«No clutter. No unnecessary features. Just a simple media downloading experience.»
+
+---
+
+Why ZENITH?
+
+There are many media downloader applications available, but many of them come with complicated interfaces, excessive advertisements, or unnecessary features.
+
+ZENITH takes a different approach.
+
+Built around simplicity.
+
+The interface is intentionally minimal so that users can immediately understand what to do without having to navigate through complicated menus.
+
+Built for multiple platforms.
+
+Instead of switching between different tools for different platforms, ZENITH brings supported platforms together into one application.
+
+Built without advertisements.
+
+ZENITH does not display banner ads, pop-ups, or interstitial advertisements during normal use.
 
 ---
 
-Overview
+Features
 
-ZENITH is designed as a simple media downloader without unnecessary interface elements.
+<table>
+<tr>
+<td width="50%">Minimalist UI
 
-With ZENITH, users can enter a link from a supported platform and process it through a single application.
+A clean interface designed to keep the application easy to understand and comfortable to use.
 
-Highlights
+</td>
+<td width="50%">Multi-Platform
 
-* Minimalist and clean user interface
-* Multi-platform media support
-* Built-in download history
-* No advertisements
-* Lightweight and simple experience
-* Android-focused application
-* Automated APK build process
-* APK distributed through project releases
+Process media links from multiple popular platforms through a single application.
 
----
+</td>
+</tr><tr>
+<td width="50%">Download History
+
+Keep track of previously processed downloads directly inside ZENITH.
+
+</td>
+<td width="50%">No Ads
+
+No banner advertisements, pop-ups, or intrusive advertising during normal usage.
+
+</td>
+</tr><tr>
+<td width="50%">Lightweight
+
+A simple application focused on its primary purpose without unnecessary features.
+
+</td>
+<td width="50%">Automated Builds
+
+Official APK releases can be generated through automated GitHub Actions workflows.
+
+</td>
+</tr>
+</table>---
 
 Supported Platforms
 
 ZENITH currently supports the following platforms:
 
-Platform| Support
+Platform| Status
 TikTok| Supported
 Instagram| Supported
 YouTube| Supported
@@ -47,263 +104,317 @@ Facebook| Supported
 Bandcamp| Supported
 Pixiv| Supported
 
-«Platform support may change over time because each platform can modify its systems, URLs, APIs, authentication mechanisms, or content delivery methods.»
+«Platform support depends on the current implementation and may change when third-party services modify their systems, APIs, URLs, authentication, or content delivery mechanisms.»
 
 ---
 
-Features
-
-Minimalist Interface
-
-ZENITH uses a simple and easy-to-understand interface.
-
-There are no unnecessary visual elements, allowing users to focus directly on the application's primary functionality.
-
-Multi-Platform Support
-
-A single application can be used with multiple supported platforms.
-
-Users do not need separate applications for each platform as long as the URL and content type are compatible with ZENITH.
-
 Download History
 
-ZENITH provides a built-in Download History feature for storing and displaying previous download activities.
+ZENITH includes a built-in Download History system.
 
-This makes it easier for users to find media that has previously been processed through the application.
+Every supported download can be tracked through the application's history interface, making it easier to find previously processed media without manually searching through your device.
 
-No Advertisements
+The feature is designed to keep the experience simple while still giving users an easy way to review previous downloads.
 
-ZENITH does not use an advertising system within the application.
+---
+
+No Ads
+
+One of the core ideas behind ZENITH is a clean user experience.
+
+ZENITH does not intentionally display advertisements inside the application.
 
 There are no:
 
-* Banner advertisements
-* Pop-up advertisements
-* Interstitial advertisements
-* Advertisements displayed during normal application usage
+- Banner advertisements
+- Pop-up advertisements
+- Full-screen advertisements
+- Interstitial advertisements
+- Advertising overlays
 
-The goal is to provide a clean and distraction-free experience.
-
-Lightweight Design
-
-ZENITH follows a simple design approach and avoids unnecessary features that are unrelated to its primary purpose.
+The application remains focused on its primary functionality instead of filling the interface with advertisements.
 
 ---
 
 Security
 
-Application security is an important part of ZENITH's distribution process.
+Security is important when distributing Android APK files.
 
-Official ZENITH APKs are built through an automated build workflow such as GitHub Actions. This process helps ensure that APKs are built from the source code and build configuration contained within the repository.
+Official ZENITH releases are built through an automated workflow. The build process can use GitHub Actions to compile the application and produce the release APK based on the project's source code and build configuration.
 
-However, it is important to distinguish between an official APK and an APK modified by a third party.
+Official APK
 
-Download from Official Sources
+For the safest experience, always download ZENITH from the official project repository or official release page.
 
-Users are strongly encouraged to download ZENITH only from:
+Avoid APK files from unknown websites, file-sharing pages, modified APK repositories, or unofficial mirrors.
 
-* The official ZENITH repository
-* The official GitHub Releases page
-* Other official distribution channels specified by the developer
+An unofficial APK may have been modified after it was built and therefore cannot be considered an official ZENITH release.
 
-Avoid APK files from unknown websites or untrusted sources, as those files may have been modified without the developer's knowledge.
+Virus & Malware
 
-Virus and Malware Information
+ZENITH is not designed to contain:
 
-ZENITH is not designed to include viruses, malware, spyware, adware, or unrelated software.
+- Viruses
+- Malware
+- Spyware
+- Adware
+- Unwanted bundled applications
 
-Official APKs built from the project's source code can be inspected and verified by users through the repository's source code and build workflow.
+However, no responsible software project should claim that an APK is absolutely guaranteed to be malware-free based only on its description.
 
-However, it is not technically appropriate to provide an absolute guarantee that a file will always be free from every possible security threat based solely on a description. Users should therefore obtain APKs from official sources and perform additional security checks when necessary.
+The safest approach is to obtain the APK from the official source, verify the release, and use Android's built-in security features.
 
 ---
 
 Google Play Protect
 
-Android may display a warning when users install an APK obtained outside the Google Play Store.
+When installing an APK outside the Google Play Store, Android may display a security warning.
 
 For example:
 
 Unknown Source
 
-or a warning from:
+or a Google Play Protect warning.
 
-Google Play Protect
+An Unknown Source warning can simply mean that the APK was downloaded outside Google Play. It does not automatically mean that the application contains malware.
 
-Such warnings may appear because the APK was obtained outside the Google Play Store and do not automatically mean that the application contains a virus.
+However, if Play Protect specifically reports that an APK is harmful or suspicious, do not ignore the warning.
 
-However, if Play Protect specifically identifies an APK as harmful or suspicious, do not ignore the warning. Verify that the APK came from the official ZENITH repository or release before continuing.
+Always verify that the APK came from the official ZENITH release before proceeding.
 
 ---
 
-Build System
+How It Works
 
-ZENITH uses an automated build workflow to generate APK releases.
+The general workflow is intentionally simple:
 
-Example build flow:
+┌──────────────────────┐
+│      Open ZENITH     │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│    Paste Media URL   │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│    Process the URL   │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│  Select Available    │
+│    Media Option      │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│    Start Download    │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│    Download History  │
+└──────────────────────┘
 
-Source Code
-     |
-     v
-GitHub Repository
-     |
-     v
-GitHub Actions
-     |
-     v
-Automated Build
-     |
-     v
-APK
-     |
-     v
-GitHub Releases
-
-Automated builds help keep the APK creation process consistent and reduce the need to perform manual builds for every release.
+The available formats, quality options, and media types depend on the platform and the specific content being processed.
 
 ---
 
 Installation
 
-1. Download the official ZENITH APK from the project's release page.
-2. Verify that the file comes from the official repository or distribution source.
-3. Open the APK file on your Android device.
-4. If Android requests permission to install applications from that source, follow the appropriate Android security settings.
-5. Continue the installation after verifying that the APK came from an official source.
+1. Download
 
-«Do not install APK files from unknown sources or unverified third-party distributions.»
+Download the latest official APK from the project's GitHub Releases page.
+
+2. Verify
+
+Make sure the APK was downloaded from the official ZENITH repository or another officially provided distribution channel.
+
+3. Install
+
+Open the APK on your Android device and follow the Android installation instructions.
+
+If Android asks for permission to install applications from that source, review the source carefully before continuing.
+
+4. Start Using ZENITH
+
+Open the application, paste a supported media URL, and start processing.
+
+«Never install modified APKs from unknown sources.»
 
 ---
 
 Usage
 
-Basic ZENITH usage:
+Using ZENITH is straightforward:
 
 1. Open ZENITH
-2. Paste or enter a supported media URL
-3. Process the URL
-4. Select the available media option
-5. Start the download
-6. Access previous downloads through Download History
+2. Copy a supported media URL
+3. Paste the URL into ZENITH
+4. Process the URL
+5. Select an available media option
+6. Start the download
+7. Find previous downloads in Download History
 
-Available formats, quality options, audio, video, or other media types may vary depending on the platform and the content being processed.
+Not every URL will necessarily provide the same options. Available media formats and quality depend on the platform and content.
 
 ---
 
 Compatibility
 
-ZENITH is intended for compatible Android devices.
+ZENITH is designed for compatible Android devices.
 
-Actual compatibility may be affected by:
+Actual compatibility may depend on:
 
-* Android version
-* CPU architecture
-* Platform changes
-* Internet connection
-* URL type
-* Content type
-* Restrictions imposed by third-party platforms
+- Android version
+- CPU architecture
+- Device configuration
+- Internet connection
+- URL type
+- Content type
+- Platform availability
+- Third-party restrictions
 
 ---
 
 Limitations
 
-ZENITH relies on third-party services and platforms to process media URLs.
+ZENITH relies on third-party platforms and services.
 
-Therefore, the developer cannot guarantee that every URL from every supported platform will always be successfully processed.
+Because these services are outside the control of the project, platform compatibility cannot be guaranteed permanently.
 
-If a platform changes its systems, certain features may experience:
+A previously supported platform may stop working if the platform changes:
 
-* Download failures
-* Unsupported URLs
-* Missing media information
-* Unavailable formats
-* Changes in available quality options
-* Temporary incompatibility
+- Website structure
+- APIs
+- URL formats
+- Authentication
+- Media delivery
+- Anti-bot systems
+- Content availability
 
-Such issues may require an application update or changes to the components used to process the affected platform.
+When this happens, an application update may be required.
 
 ---
 
 Privacy
 
-ZENITH is designed with a simple usage model and does not display advertisements within the application.
+ZENITH aims to keep the application simple and free from unnecessary data collection.
 
-Users should be aware that when a URL is processed through a service or component that communicates with a third-party server, information required to process that URL may be transmitted to the relevant service.
+However, processing a media URL may involve communication with third-party services depending on how the platform integration works.
 
-Do not enter passwords, authentication tokens, cookies, personal information, or other sensitive data into the application or URLs unless they are specifically required for the intended functionality.
+Users should never provide:
 
----
+- Passwords
+- Authentication tokens
+- Private cookies
+- Personal credentials
+- Sensitive information
 
-Copyright and Terms of Service
+unless explicitly required by a legitimate feature.
 
-ZENITH provides a tool for processing media from supported platforms.
-
-Users are responsible for ensuring that the content they download:
-
-* Is legally available for them to download
-* Does not violate copyright
-* Does not violate the rights of the content owner
-* Does not violate the Terms of Service of the relevant platform
-* Is not used for unlawful purposes
-
-ZENITH does not grant ownership or permission to use content hosted on third-party platforms.
+For complete details, refer to the project's source code and privacy documentation.
 
 ---
 
-Version
+Copyright & Terms of Service
 
-Current Version: "v4.2.1"
+ZENITH is a technical tool for processing media URLs.
 
-Release Notes
+Users are responsible for ensuring that their use of the application complies with applicable laws, copyright regulations, and the Terms of Service of the platforms they use.
 
-ZENITH v4.2.1 focuses on providing a simple media downloader experience with multi-platform support, a minimalist interface, download history, and an ad-free experience.
+Do not download, redistribute, or reuse copyrighted content unless you have the necessary rights or permission.
+
+ZENITH does not grant ownership or distribution rights to content hosted by third-party platforms.
+
+---
+
+Disclaimer
+
+ZENITH is an independent third-party application.
+
+It is not affiliated with, endorsed by, sponsored by, or officially supported by:
+
+- TikTok
+- Instagram
+- YouTube
+- X / Twitter
+- Spotify
+- Bilibili
+- Douyin
+- RedNote
+- Threads
+- Pinterest
+- Apple Music
+- Facebook
+- Bandcamp
+- Pixiv
+
+All trademarks, logos, and brand names belong to their respective owners.
+
+Third-party platforms may change their systems or policies at any time, which may affect ZENITH's compatibility.
 
 ---
 
 Project Structure
 
-Example repository structure:
+A typical ZENITH repository may look like this:
 
 ZENITH/
+│
 ├── .github/
 │   └── workflows/
 │       └── build.yml
+│
 ├── app/
+│
 ├── gradle/
+│
 ├── README.md
 ├── LICENSE
 ├── build.gradle
 ├── settings.gradle
 └── gradlew
 
-The actual project structure may differ depending on the repository configuration.
+The actual structure may differ depending on the project's implementation.
 
 ---
 
 Contributing
 
-Contributions to the project are welcome.
+Contributions are welcome.
 
-If you would like to contribute to ZENITH:
+If you have an idea, improvement, bug fix, or platform compatibility update, feel free to contribute to the project.
 
-1. Fork the repository.
-2. Create a new branch.
-3. Make the necessary changes.
-4. Test your changes.
-5. Commit your changes.
-6. Push the branch to your fork.
-7. Open a Pull Request.
+Contribution Flow
 
-Please ensure that proposed changes remain aligned with the project's primary goals: simplicity, lightweight design, and ease of use.
+Fork
+  ↓
+Create Branch
+  ↓
+Make Changes
+  ↓
+Test
+  ↓
+Commit
+  ↓
+Push
+  ↓
+Pull Request
+
+Please keep contributions aligned with the project's core philosophy:
+
+«Simple, clean, lightweight, and easy to use.»
 
 ---
 
 Bug Reports
 
-If you encounter an issue, create an Issue with clear and relevant information.
+Found a problem?
 
-Please include:
+Open an Issue and provide enough information to reproduce it.
 
 ZENITH Version:
 Android Version:
@@ -313,29 +424,34 @@ URL Type:
 Problem:
 Steps to Reproduce:
 
-Do not include passwords, authentication tokens, cookies, account information, or other sensitive personal data when submitting a bug report.
+Please remove any private information before submitting an issue.
+
+Never include passwords, authentication tokens, cookies, private URLs, or account credentials.
 
 ---
 
-Disclaimer
+Version
 
-ZENITH is a third-party application and is not affiliated with, sponsored by, endorsed by, or officially supported by TikTok, Instagram, YouTube, X, Spotify, Bilibili, Douyin, RedNote, Threads, Pinterest, Apple Music, Facebook, Bandcamp, Pixiv, or any other platform mentioned in this repository.
+Current Release: "v4.2.1"
 
-All platform names, trademarks, and brand names belong to their respective owners.
+v4.2.1
 
-Third-party platform functionality and compatibility may change without notice.
+ZENITH v4.2.1 provides a clean and minimalist media downloading experience with:
 
-The developer is not responsible for the use of this application to download, redistribute, or otherwise use content in violation of copyright laws, applicable laws, or the Terms of Service of third-party platforms.
+- Multi-platform support
+- Download History
+- Ad-free interface
+- Lightweight design
+- Automated APK builds
+- Official release distribution
 
 ---
 
 License
 
-The distribution and use of the ZENITH source code are governed by the license specified in the:
+This project is distributed under the license specified in the repository's "LICENSE" file.
 
-LICENSE
-
-Please read the "LICENSE" file before using, modifying, or redistributing the project's source code.
+Please read the license before using, modifying, or redistributing the source code.
 
 ---
 
@@ -343,6 +459,13 @@ Project Status
 
 ZENITH v4.2.1
 
-Minimalist. Fast. Clean. No Ads.
+«Minimalist. Fast. Clean. No Ads.»
 
-Made for a simple media downloading experience.
+Built for people who just want a simple way to process media links without unnecessary clutter.
+
+---
+
+<p align="center">
+  <strong>ZENITH</strong><br>
+  Minimalist Media Downloader for Android
+</p>
