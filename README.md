@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/zenith-logo.svg" width="140" alt="ZENITH Logo">
+  <img src="assets/zenith-logo.png" width="140" alt="ZENITH Logo">
 </p><h1 align="center">ZENITH</h1><p align="center">
   <strong>Minimalist Media Downloader for Android</strong>
 </p><p align="center">
