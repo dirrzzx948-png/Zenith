@@ -199,7 +199,7 @@ Please read the license before using, modifying, or redistributing the source co
 ---
 
 <p align="center">
-  <img src="assets/zenith-logo.svg" width="80" alt="ZENITH">
+  <img src="assets/zenith-logo.png" width="80" alt="ZENITH">
   <br><br>
   <strong>ZENITH v4.2.1</strong>
   <br>
