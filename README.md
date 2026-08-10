@@ -86,23 +86,17 @@ Official APK releases can be generated through automated GitHub Actions workflow
 </tr>
 </table>---
 
-Supported Platforms
+## Supported Platforms
 
-Platform| Status
-TikTok| Supported
-Instagram| Supported
-YouTube| Supported
-X / Twitter| Supported
-Spotify| Supported
-Bilibili| Supported
-Douyin| Supported
-RedNote| Supported
-Threads| Supported
-Pinterest| Supported
-Apple Music| Supported
-Facebook| Supported
-Bandcamp| Supported
-Pixiv| Supported
+| Platform                                                                                                                                                              | Features               | Platform                                                                            | Features                             |
+| :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------- | :---------------------------------------------------------------------------------- | :----------------------------------- |
+| <img src="https://cdn.simpleicons.org/tiktok/000000" width="16" /> **TikTok**                                                                                         | Video (No WM) / Photos | <img src="https://cdn.simpleicons.org/instagram/E4405F" width="16" /> **Instagram** | Reels / Stories / Photos             |
+| <img src="https://cdn.simpleicons.org/youtube/FF0000" width="16" /> **YouTube**                                                                                       | MP4 Video / MP3 Audio  | <img src="https://cdn.simpleicons.org/x/000000" width="16" /> **Twitter (X)**       | HD Video / GIFs                      |
+| <img src="https://cdn.simpleicons.org/spotify/1DB954" width="16" /> **Spotify**                                                                                       | MP3 Audio              | <img src="https://cdn.simpleicons.org/pinterest/E60023" width="16" /> **Pinterest** | PinDown & PinDirect (Video / Images) |
+| <img src="https://cdn.simpleicons.org/applemusic/FA243C" width="16" /> **Apple Music**                                                                                | MP3 Audio              | <img src="https://cdn.simpleicons.org/facebook/1877F2" width="16" /> **Facebook**   | Reels / HD Video                     |
+| <img src="https://cdn.simpleicons.org/xiaohongshu/FF2442" width="16" /> **RedNote**                                                                                   | Photos / Videos        | <img src="https://cdn.simpleicons.org/threads/000000" width="16" /> **Threads**     | Video / Photos                       |
+| <img src="https://cdn.simpleicons.org/bilibili/00A1D6" width="16" /> **Bilibili**                                                                                     | Video / Audio (DASH)   | <img src="https://cdn.simpleicons.org/pixiv/0096FA" width="16" /> **Pixiv**         | Gallery / Ugoira to MP4              |
+| <img src="https://cdn.simpleicons.org/douyin/000000" width="16" style="display:none;" /><img src="https://cdn.simpleicons.org/tiktok/000000" width="16" /> **Douyin** | Video (No WM) / Photos | <img src="https://cdn.simpleicons.org/bandcamp/1DA1F2" width="16" /> **Bandcamp**   | Album / MP3 Track                    |
 
 «Platform support depends on the current implementation and may change when third-party services modify their systems, APIs, URLs, authentication, or content delivery mechanisms.»
 
