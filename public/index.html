@@ -1,1 +1,3625 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Zenith - Minimalist Media Downloader</title>
+    <meta
+      name="description"
+      content="Zenith is a minimalist, private media downloader for TikTok, Instagram, YouTube, Twitter, Spotify, Pinterest, Apple Music, Facebook, SoundCloud, Threads, Bandcamp, and Pixiv. Save media directly to your device."
+    />
+    <meta property="og:title" content="Zenith - Minimalist Media Downloader" />
+    <meta
+      property="og:description"
+      content="Save photos and videos from 14+ platforms directly to your device. Fast, private, and tracker-free."
+    />
+    <meta property="og:image" content="assets/icon.png" />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/png" href="assets/icon.png" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="js/vendor/pdf-lib.min.js"></script>
+    <style>
+      /* ===== shadcn/ui-inspired Minimalist Design ===== */
+      :root {
+        --background: #ffffff;
+        --foreground: #0c0c0c;
+        --card: #ffffff;
+        --card-foreground: #0c0c0c;
+        --popover: #ffffff;
+        --popover-foreground: #0c0c0c;
+        --primary: #171717;
+        --primary-foreground: #fafafa;
+        --secondary: #f5f5f5;
+        --secondary-foreground: #171717;
+        --muted: #f5f5f5;
+        --muted-foreground: #737373;
+        --accent: #f5f5f5;
+        --accent-foreground: #171717;
+        --destructive: #ef4444;
+        --destructive-foreground: #fafafa;
+        --border: #e5e5e5;
+        --input: #e5e5e5;
+        --ring: #0c0c0c;
+        --radius: 0.5rem;
+        --radius-lg: 0.75rem;
+        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      }
 
+      .dark {
+        --background: #0c0c0c;
+        --foreground: #fafafa;
+        --card: #0c0c0c;
+        --card-foreground: #fafafa;
+        --popover: #0c0c0c;
+        --popover-foreground: #fafafa;
+        --primary: #fafafa;
+        --primary-foreground: #171717;
+        --secondary: #262626;
+        --secondary-foreground: #fafafa;
+        --muted: #262626;
+        --muted-foreground: #a3a3a3;
+        --accent: #262626;
+        --accent-foreground: #fafafa;
+        --destructive: #7f1d1d;
+        --destructive-foreground: #fafafa;
+        --border: #262626;
+        --input: #262626;
+        --ring: #d4d4d4;
+        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        border-color: var(--border);
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background: var(--background);
+        color: var(--foreground);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        transition: background 0.2s, color 0.2s;
+      }
+
+      .app-container {
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 0 1rem 80px 1rem;
+        min-height: 100vh;
+        position: relative;
+        background: var(--background);
+        transition: background 0.2s;
+      }
+
+      /* ===== Header ===== */
+      header {
+        padding: 1.5rem 0 0.75rem 0;
+        text-align: center;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 1.5rem;
+      }
+      header h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        color: var(--foreground);
+      }
+      header p {
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        margin-top: 0.15rem;
+        font-weight: 400;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+
+      /* ===== Page Content ===== */
+      .page-content {
+        display: block;
+        animation: fadeIn 0.2s ease;
+      }
+      .page-content.hidden {
+        display: none;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(6px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ===== Input Section ===== */
+      .input-section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+      }
+      .input-wrapper {
+        display: flex;
+        align-items: center;
+        background: var(--background);
+        border: 1px solid var(--input);
+        border-radius: var(--radius);
+        padding: 0 0.5rem;
+        transition: border-color 0.15s, box-shadow 0.15s;
+        box-shadow: var(--shadow);
+      }
+      .input-wrapper:focus-within {
+        border-color: var(--ring);
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05), var(--shadow);
+      }
+      .dark .input-wrapper:focus-within {
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05), var(--shadow);
+      }
+      .search-icon {
+        color: var(--muted-foreground);
+        display: flex;
+        align-items: center;
+        margin-right: 0.25rem;
+        flex-shrink: 0;
+      }
+      .input-wrapper input {
+        flex: 1;
+        border: none;
+        outline: none;
+        background: transparent;
+        padding: 0.7rem 0.25rem;
+        font-size: 0.875rem;
+        color: var(--foreground);
+        min-width: 0;
+      }
+      .input-wrapper input::placeholder {
+        color: var(--muted-foreground);
+      }
+      .input-action-btn {
+        background: transparent;
+        border: none;
+        color: var(--muted-foreground);
+        padding: 0.4rem 0.4rem;
+        cursor: pointer;
+        border-radius: calc(var(--radius) - 2px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.15s, color 0.15s;
+      }
+      .input-action-btn:hover {
+        background: var(--secondary);
+        color: var(--foreground);
+      }
+      .input-action-btn.hidden {
+        display: none;
+      }
+
+      #downloadBtn {
+        background: var(--primary);
+        color: var(--primary-foreground);
+        border: none;
+        border-radius: var(--radius);
+        padding: 0.7rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.15s, transform 0.1s;
+        width: 100%;
+        box-shadow: var(--shadow);
+      }
+      #downloadBtn:hover { opacity: 0.85; }
+      #downloadBtn:active { transform: scale(0.98); }
+
+      /* ===== Loader ===== */
+      #loader {
+        margin: 1.5rem 0;
+        text-align: center;
+      }
+      #loader.hidden { display: none; }
+      .skeleton-card {
+        display: flex;
+        gap: 1rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        box-shadow: var(--shadow);
+      }
+      .skeleton-thumb {
+        width: 80px;
+        height: 80px;
+        background: var(--muted);
+        border-radius: calc(var(--radius) - 4px);
+        flex-shrink: 0;
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+      .skeleton-info { flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+      .skeleton-line {
+        height: 12px;
+        background: var(--muted);
+        border-radius: 4px;
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+      .skeleton-line.title { width: 70%; height: 16px; }
+      .skeleton-line.short { width: 40%; }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+
+      #loaderText {
+        font-size: 0.875rem;
+        color: var(--muted-foreground);
+        margin: 0.5rem 0;
+      }
+      .progress-container {
+        width: 100%;
+        height: 4px;
+        background: var(--secondary);
+        border-radius: 9999px;
+        overflow: hidden;
+        margin-top: 0.5rem;
+      }
+      .progress-container.hidden { display: none; }
+      .progress-bar {
+        height: 100%;
+        width: 0%;
+        background: var(--primary);
+        border-radius: 9999px;
+        transition: width 0.3s ease;
+      }
+
+      /* ===== Result Card ===== */
+      .media-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 1rem;
+        box-shadow: var(--shadow-md);
+        position: relative;
+        margin: 1.5rem 0;
+      }
+      .close-card {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: transparent;
+        border: none;
+        color: var(--muted-foreground);
+        cursor: pointer;
+        padding: 0.25rem;
+        border-radius: calc(var(--radius) - 4px);
+        transition: background 0.15s, color 0.15s;
+        z-index: 5;
+      }
+      .close-card:hover {
+        background: var(--secondary);
+        color: var(--foreground);
+      }
+      .thumbnail-wrapper {
+        position: relative;
+        border-radius: calc(var(--radius) - 4px);
+        overflow: hidden;
+        background: var(--secondary);
+        margin-bottom: 0.75rem;
+        aspect-ratio: 16 / 9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #slidesWrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      #slidesWrapper::-webkit-scrollbar { display: none; }
+      #slidesWrapper img,
+      #slidesWrapper video {
+        flex: 0 0 100%;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        scroll-snap-align: start;
+        background: var(--secondary);
+      }
+      .slider-nav {
+        position: absolute;
+        bottom: 0.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: rgba(0,0,0,0.6);
+        backdrop-filter: blur(4px);
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        color: #fff;
+        font-size: 0.75rem;
+      }
+      .slider-nav.hidden { display: none; }
+      .slide-btn {
+        background: transparent;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        padding: 0.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background 0.15s;
+      }
+      .slide-btn:hover { background: rgba(255,255,255,0.2); }
+
+      .info-wrapper h2 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--foreground);
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .download-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .download-options .download-btn {
+        background: var(--secondary);
+        color: var(--secondary-foreground);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 0.6rem 0.75rem;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.15s, border-color 0.15s;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .download-options .download-btn:hover {
+        background: var(--accent);
+        border-color: var(--ring);
+      }
+      .download-options .download-btn .badge {
+        font-size: 0.65rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        background: var(--primary);
+        color: var(--primary-foreground);
+        padding: 0.15rem 0.5rem;
+        border-radius: 9999px;
+        letter-spacing: 0.02em;
+      }
+
+      /* ===== Dynamic Greeting ===== */
+      .dynamic-greeting {
+        margin: 1.5rem 0 1rem 0;
+        padding: 0.75rem 1rem;
+        background: var(--secondary);
+        border-radius: var(--radius);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.8125rem;
+        color: var(--foreground);
+        border: 1px solid var(--border);
+      }
+      #greetingStats {
+        color: var(--muted-foreground);
+        font-size: 0.75rem;
+      }
+
+      /* ===== Supported Platforms ===== */
+      .supported-section {
+        margin: 1.5rem 0 0.5rem 0;
+      }
+      .section-label {
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted-foreground);
+        font-weight: 600;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+      .platform-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        background: var(--secondary);
+        padding: 0.25rem 0.65rem 0.25rem 0.5rem;
+        border-radius: 9999px;
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: var(--foreground);
+        border: 1px solid var(--border);
+        transition: background 0.15s;
+      }
+      .chip:hover { background: var(--accent); }
+      .chip svg { flex-shrink: 0; }
+
+      /* ===== Bottom Navigation ===== */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 480px;
+        background: var(--background);
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-around;
+        padding: 0.4rem 0 env(safe-area-inset-bottom, 0.4rem) 0;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 50;
+      }
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.1rem;
+        text-decoration: none;
+        color: var(--muted-foreground);
+        font-size: 0.6rem;
+        font-weight: 500;
+        padding: 0.3rem 0.75rem;
+        border-radius: var(--radius);
+        transition: color 0.15s, background 0.15s;
+        cursor: pointer;
+        border: none;
+        background: transparent;
+      }
+      .nav-item svg {
+        width: 22px;
+        height: 22px;
+        transition: transform 0.15s;
+      }
+      .nav-item:hover { color: var(--foreground); }
+      .nav-item.active {
+        color: var(--foreground);
+        font-weight: 600;
+      }
+      .nav-item.active svg { transform: scale(1.05); }
+
+      /* ===== Settings Pages ===== */
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1.25rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .page-header h2 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--foreground);
+      }
+      .page-header p {
+        font-size: 0.8rem;
+        color: var(--muted-foreground);
+        margin-top: 0.1rem;
+      }
+
+      .settings-menu-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+      .settings-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        transition: background 0.15s;
+        border-bottom: 1px solid var(--border);
+        background: var(--card);
+      }
+      .settings-menu-item:last-child { border-bottom: none; }
+      .settings-menu-item:hover { background: var(--secondary); }
+      .menu-icon {
+        color: var(--muted-foreground);
+        flex-shrink: 0;
+        width: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .menu-text { flex: 1; min-width: 0; }
+      .menu-title {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--foreground);
+      }
+      .menu-desc {
+        font-size: 0.7rem;
+        color: var(--muted-foreground);
+        margin-top: 0.05rem;
+      }
+
+      /* ===== Settings Sub-pages ===== */
+      .settings-sub-page {
+        animation: fadeIn 0.2s ease;
+      }
+      .settings-sub-page.hidden { display: none; }
+      .sub-page-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .sub-page-header h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--foreground);
+      }
+      .back-btn-settings {
+        background: transparent;
+        border: none;
+        color: var(--foreground);
+        cursor: pointer;
+        padding: 0.25rem;
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.15s;
+      }
+      .back-btn-settings:hover { background: var(--secondary); }
+
+      .settings-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        margin-bottom: 1rem;
+      }
+      .settings-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--border);
+        background: var(--card);
+        gap: 0.5rem;
+      }
+      .settings-item:last-child { border-bottom: none; }
+      .settings-item .item-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: var(--foreground);
+        flex: 1;
+        min-width: 0;
+      }
+      .settings-item .item-label svg {
+        flex-shrink: 0;
+        color: var(--muted-foreground);
+      }
+      .settings-item .item-label span { word-break: break-word; }
+
+      .info-val {
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        text-align: right;
+        flex-shrink: 0;
+      }
+      .action-label {
+        font-size: 0.65rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--primary);
+        cursor: pointer;
+        background: transparent;
+        border: none;
+        padding: 0.2rem 0.5rem;
+        border-radius: var(--radius);
+        transition: background 0.15s;
+      }
+      .action-label:hover { background: var(--secondary); }
+
+      /* ===== Toggle Switch ===== */
+      .toggle-switch {
+        position: relative;
+        width: 40px;
+        height: 22px;
+        flex-shrink: 0;
+      }
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .toggle-switch label {
+        position: absolute;
+        inset: 0;
+        background: var(--muted);
+        border-radius: 9999px;
+        cursor: pointer;
+        transition: background 0.2s;
+        border: 2px solid var(--border);
+      }
+      .toggle-switch label::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 14px;
+        height: 14px;
+        background: white;
+        border-radius: 50%;
+        transition: transform 0.2s;
+        box-shadow: var(--shadow);
+      }
+      .toggle-switch input:checked + label {
+        background: var(--primary);
+        border-color: var(--primary);
+      }
+      .toggle-switch input:checked + label::after {
+        transform: translateX(18px);
+        background: var(--primary-foreground);
+      }
+
+      /* ===== Custom Select ===== */
+      .custom-select {
+        position: relative;
+        min-width: 110px;
+        flex-shrink: 0;
+        cursor: pointer;
+        user-select: none;
+      }
+      .selected-text {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.25rem 0.5rem 0.25rem 0.75rem;
+        background: var(--secondary);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--foreground);
+        gap: 0.25rem;
+        transition: border-color 0.15s;
+        min-height: 32px;
+      }
+      .selected-text:hover { border-color: var(--ring); }
+      .dropdown-arrow { color: var(--muted-foreground); }
+      .dropdown-menu {
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-lg);
+        min-width: 140px;
+        z-index: 20;
+        overflow: hidden;
+        padding: 0.25rem 0;
+      }
+      .dropdown-menu.hidden { display: none; }
+      .dropdown-item {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.75rem;
+        color: var(--foreground);
+        transition: background 0.1s;
+        cursor: pointer;
+      }
+      .dropdown-item:hover { background: var(--secondary); }
+
+      /* ===== Modal ===== */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        padding: 1rem;
+        animation: fadeIn 0.2s ease;
+      }
+      .modal-overlay.hidden { display: none; }
+      .modal-content {
+        background: var(--card);
+        border-radius: var(--radius-lg);
+        max-width: 400px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border);
+        padding: 1.25rem;
+      }
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      .modal-header h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--foreground);
+      }
+      .modal-header button {
+        background: transparent;
+        border: none;
+        color: var(--muted-foreground);
+        cursor: pointer;
+        padding: 0.25rem;
+        border-radius: var(--radius);
+        transition: background 0.15s;
+      }
+      .modal-header button:hover { background: var(--secondary); }
+
+      .modal-thumb-container {
+        position: relative;
+        border-radius: calc(var(--radius) - 4px);
+        overflow: hidden;
+        background: var(--secondary);
+        aspect-ratio: 16 / 9;
+        margin-bottom: 0.75rem;
+      }
+      #modalSlidesWrapper {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        height: 100%;
+      }
+      #modalSlidesWrapper::-webkit-scrollbar { display: none; }
+      #modalSlidesWrapper img,
+      #modalSlidesWrapper video {
+        flex: 0 0 100%;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        scroll-snap-align: start;
+      }
+
+      .modal-info .url-text {
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        word-break: break-all;
+        margin-bottom: 0.75rem;
+      }
+      #redownloadBtn {
+        background: var(--primary);
+        color: var(--primary-foreground);
+        border: none;
+        border-radius: var(--radius);
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.15s;
+        width: 100%;
+      }
+      #redownloadBtn:hover { opacity: 0.85; }
+
+      /* ===== Info Modal ===== */
+      .info-modal .info-body {
+        font-size: 0.875rem;
+        color: var(--foreground);
+        line-height: 1.6;
+      }
+      .info-dont-show {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        cursor: pointer;
+      }
+      .info-dont-show.hidden { display: none; }
+      .info-dont-show input {
+        accent-color: var(--primary);
+        width: 16px;
+        height: 16px;
+      }
+
+      /* ===== Confirm Modal ===== */
+      .confirm-body {
+        text-align: center;
+        padding: 0.5rem 0;
+      }
+      .confirm-body h2 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+      .confirm-body p {
+        font-size: 0.875rem;
+        color: var(--muted-foreground);
+      }
+      .confirm-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1.25rem;
+        justify-content: flex-end;
+      }
+      .confirm-actions button {
+        padding: 0.5rem 1.25rem;
+        border-radius: var(--radius);
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: opacity 0.15s;
+      }
+      .cancel-btn {
+        background: var(--secondary);
+        color: var(--secondary-foreground);
+      }
+      .ok-btn {
+        background: var(--destructive);
+        color: var(--destructive-foreground);
+      }
+      .ok-btn:hover, .cancel-btn:hover { opacity: 0.8; }
+
+      /* ===== Guide Modal ===== */
+      .guide-modal .guide-header h2 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+      .guide-body {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+      .guide-item {
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+      }
+      .guide-icon {
+        flex-shrink: 0;
+        color: var(--primary);
+        margin-top: 0.1rem;
+      }
+      .guide-text {
+        font-size: 0.875rem;
+        color: var(--foreground);
+        line-height: 1.5;
+      }
+      .guide-footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 1rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid var(--border);
+      }
+      .guide-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        cursor: pointer;
+      }
+      .guide-checkbox input {
+        accent-color: var(--primary);
+        width: 16px;
+        height: 16px;
+      }
+      .guide-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .guide-actions button {
+        padding: 0.4rem 1rem;
+        border-radius: var(--radius);
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: opacity 0.15s;
+      }
+      .secondary-btn {
+        background: var(--secondary);
+        color: var(--secondary-foreground);
+      }
+      .primary-btn {
+        background: var(--primary);
+        color: var(--primary-foreground);
+      }
+      .guide-actions button:hover { opacity: 0.8; }
+
+      /* ===== Misc ===== */
+      .about-quote {
+        text-align: center;
+        font-size: 0.7rem;
+        color: var(--muted-foreground);
+        padding: 1.5rem 0 0.5rem 0;
+        font-style: italic;
+        letter-spacing: 0.02em;
+        border-top: 1px solid var(--border);
+        margin-top: 1.5rem;
+      }
+      .empty-state {
+        text-align: center;
+        padding: 2.5rem 0;
+        color: var(--muted-foreground);
+        font-size: 0.875rem;
+      }
+      .history-actions-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .edit-btn, .done-btn, .clear-all-btn {
+        background: transparent;
+        border: none;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--primary);
+        cursor: pointer;
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--radius);
+        transition: background 0.15s;
+      }
+      .edit-btn:hover, .done-btn:hover, .clear-all-btn:hover {
+        background: var(--secondary);
+      }
+      .history-actions { display: flex; gap: 0.5rem; }
+      .history-actions.hidden { display: none; }
+
+      .settings-section-divider {
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted-foreground);
+        font-weight: 600;
+        margin: 1.25rem 0 0.5rem 0;
+        padding: 0 0.25rem;
+      }
+      .link-item {
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+      }
+      .link-item:hover { background: var(--secondary); }
+
+      .update-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .settings-card-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+      }
+      .scraper-status-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.8rem;
+        background: var(--card);
+      }
+      .scraper-status-row:last-child { border-bottom: none; }
+      .scraper-status-row .status-badge {
+        font-size: 0.6rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        padding: 0.1rem 0.5rem;
+        border-radius: 9999px;
+        background: var(--secondary);
+        color: var(--muted-foreground);
+      }
+      .scraper-status-row .status-badge.online {
+        background: #22c55e;
+        color: #fff;
+      }
+      .scraper-status-row .status-badge.offline {
+        background: #ef4444;
+        color: #fff;
+      }
+      .scraper-status-row .status-badge.unknown {
+        background: var(--muted);
+        color: var(--muted-foreground);
+      }
+
+      /* ===== Responsive ===== */
+      @media (max-width: 400px) {
+        .app-container { padding: 0 0.75rem 80px 0.75rem; }
+        .settings-item { flex-wrap: wrap; gap: 0.3rem; }
+        .custom-select { min-width: 90px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <header>
+        <h1>Zenith</h1>
+        <p data-i18n="app-desc">Minimalist Media Downloader</p>
+      </header>
+
+      <main>
+        <!-- Home Page -->
+        <div id="homePage" class="page-content">
+          <div class="input-section">
+            <div class="input-wrapper">
+              <span class="search-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                  />
+                </svg>
+              </span>
+              <input
+                type="text"
+                id="urlInput"
+                placeholder="Paste link here..."
+                autocomplete="off"
+                data-i18n-placeholder="input-placeholder"
+              />
+              <button
+                id="pasteBtn"
+                class="input-action-btn"
+                aria-label="Paste link"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M19 2h-4.18C14.4.84 13.3 0 12 0S9.6.84 9.18 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 18H5V4h2v3h10V4h2v16z"
+                  />
+                </svg>
+              </button>
+              <button
+                id="clearBtn"
+                class="input-action-btn hidden"
+                aria-label="Clear input"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <button id="downloadBtn" data-i18n="btn-analyze">Analyze</button>
+          </div>
+
+          <div id="loader" class="hidden">
+            <div class="skeleton-card">
+              <div class="skeleton-thumb"></div>
+              <div class="skeleton-info">
+                <div class="skeleton-line title"></div>
+                <div class="skeleton-line"></div>
+                <div class="skeleton-line short"></div>
+              </div>
+            </div>
+            <p id="loaderText" data-i18n="loader-analyzing">
+              Analyzing link...
+            </p>
+            <div class="progress-container hidden" id="progressContainer">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+          </div>
+
+          <div id="resultSection" class="hidden">
+            <div class="media-card">
+              <button id="closeResult" class="close-card">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                  />
+                </svg>
+              </button>
+              <div class="thumbnail-wrapper" id="previewContainer">
+                <div id="slidesWrapper"></div>
+                <div class="slider-nav hidden" id="sliderNav">
+                  <button
+                    id="slidePrevBtn"
+                    class="slide-btn"
+                    aria-label="Previous slide"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="20"
+                      height="20"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"
+                      />
+                    </svg>
+                  </button>
+                  <span id="slideIndicator" class="slide-indicator">1 / 1</span>
+                  <button
+                    id="slideNextBtn"
+                    class="slide-btn"
+                    aria-label="Next slide"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="20"
+                      height="20"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="info-wrapper">
+                <h2 id="resultTitle">TikTok Content</h2>
+                <div id="downloadList" class="download-options"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="dynamicGreeting" class="dynamic-greeting">
+            <span id="greetingText" data-i18n="greeting-ready"
+              >Ready to save?</span
+            >
+            <span id="greetingStats">0 items in your history</span>
+          </div>
+          <div class="supported-section">
+            <span class="section-label" data-i18n="label-platforms"
+              >Supported Platforms</span
+            >
+            <div class="platform-chips">
+              <div class="chip">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M16.8218 5.1344C16.0887 4.29394 15.648 3.19805 15.648 2H14.7293C14.9659 3.3095 15.7454 4.43326 16.8218 5.1344Z"
+                  />
+                  <path
+                    d="M8.3218 11.9048C6.73038 11.9048 5.43591 13.2004 5.43591 14.7931C5.43591 15.903 6.06691 16.8688 6.98556 17.3517C6.64223 16.8781 6.43808 16.2977 6.43808 15.6661C6.43808 14.0734 7.73255 12.7778 9.324 12.7778C9.62093 12.7778 9.90856 12.8288 10.1777 12.9124V9.40192C9.89927 9.36473 9.61628 9.34149 9.324 9.34149C9.27294 9.34149 9.22654 9.34614 9.1755 9.34614V12.0394C8.90176 11.9558 8.61873 11.9048 8.3218 11.9048Z"
+                  />
+                  <path
+                    d="M19.4245 6.67608V9.34614C17.6429 9.34614 15.9912 8.77501 14.6456 7.80911V14.7977C14.6456 18.2851 11.8108 21.127 8.32172 21.127C6.97621 21.127 5.7235 20.6998 4.69812 19.98C5.8534 21.2198 7.50049 22 9.32392 22C12.8083 22 15.6478 19.1627 15.6478 15.6707V8.68211C16.9933 9.64801 18.645 10.2191 20.4267 10.2191V6.78293C20.0787 6.78293 19.7446 6.74574 19.4245 6.67608Z"
+                  />
+                  <path
+                    d="M14.6456 14.7977V7.80911C15.9912 8.77501 17.6429 9.34614 19.4245 9.34614V6.67608C18.3945 6.45788 17.4899 5.90063 16.8218 5.1344C15.7454 4.43326 14.9704 3.3095 14.7245 2H12.2098L12.2051 15.7775C12.1495 17.3192 10.8782 18.5591 9.32393 18.5591C8.35884 18.5591 7.50977 18.0808 6.98085 17.3564C6.06219 16.8688 5.4312 15.9076 5.4312 14.7977C5.4312 13.205 6.72567 11.9094 8.31708 11.9094C8.61402 11.9094 8.90168 11.9605 9.17079 12.0441V9.35079C5.75598 9.42509 3 12.2298 3 15.6707C3 17.3331 3.64492 18.847 4.69812 19.98C5.7235 20.6998 6.97621 21.127 8.32172 21.127C11.8061 21.127 14.6456 18.2851 14.6456 14.7977Z"
+                  />
+                </svg>
+                <span>TikTok</span>
+              </div>
+              <div class="chip">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 01-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 017.8 2m-.2 2A3.6 3.6 0 004 7.6v8.8A3.6 3.6 0 007.6 20h8.8a3.6 3.6 0 003.6-3.6V7.6A3.6 3.6 0 0016.4 4H7.6m9.65 1.5a1.25 1.25 0 011.25 1.25A1.25 1.25 0 0117.25 8 1.25 1.25 0 0116 6.75a1.25 1.25 0 011.25-1.25M12 7a5 5 0 015 5 5 5 0 01-5 5 5 5 0 01-5-5 5 5 0 015-5m0 2a3 3 0 00-3 3 3 3 0 003 3 3 3 0 003-3 3 3 0 00-3-3z"
+                  />
+                </svg>
+                <span>Instagram</span>
+              </div>
+              <div class="chip">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 4-8 4z"
+                  />
+                </svg>
+                <span>YouTube</span>
+              </div>
+              <div class="chip">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+                  />
+                </svg>
+                <span>Twitter</span>
+              </div>
+              <div class="chip">
+                <svg
+                  viewBox="0 0 20 20"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                >
+                  <g transform="translate(-84.000000, -7319.000000)">
+                    <path
+                      d="M99.915,7327.865 C96.692,7325.951 91.375,7325.775 88.297,7326.709 C87.803,7326.858 87.281,7326.58 87.131,7326.085 C86.981,7325.591 87.26,7325.069 87.754,7324.919 C91.287,7323.846 97.159,7324.053 100.87,7326.256 C101.314,7326.52 101.46,7327.094 101.196,7327.538 C100.934,7327.982 100.358,7328.129 99.915,7327.865 L99.915,7327.865 Z M99.81,7330.7 C99.584,7331.067 99.104,7331.182 98.737,7330.957 C96.05,7329.305 91.952,7328.827 88.773,7329.792 C88.36,7329.916 87.925,7329.684 87.8,7329.272 C87.676,7328.86 87.908,7328.425 88.32,7328.3 C91.951,7327.198 96.466,7327.732 99.553,7329.629 C99.92,7329.854 100.035,7330.334 99.81,7330.7 L99.81,7330.7 Z M98.586,7333.423 C98.406,7333.717 98.023,7333.81 97.729,7333.63 C95.381,7332.195 92.425,7331.871 88.944,7332.666 C88.609,7332.743 88.274,7332.533 88.198,7332.197 C88.121,7331.862 88.33,7331.528 88.667,7331.451 C92.476,7330.58 95.743,7330.955 98.379,7332.566 C98.673,7332.746 98.766,7333.129 98.586,7333.423 L98.586,7333.423 Z M94,7319 C88.477,7319 84,7323.477 84,7329 C84,7334.523 88.477,7339 94,7339 C99.523,7339 104,7334.523 104,7329 C104,7323.478 99.523,7319.001 94,7319.001 L94,7319 Z"
+                    ></path>
+                  </g>
+                </svg>
+                <span>Spotify</span>
+              </div>
+              <div class="chip">
+                <svg
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                  role="img"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"
+                    ></path>
+                  </g>
+                </svg>
+                <span>Bilibili</span>
+              </div>
+              <div class="chip">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M16.8218 5.1344C16.0887 4.29394 15.648 3.19805 15.648 2H14.7293C14.9659 3.3095 15.7454 4.43326 16.8218 5.1344Z"
+                  />
+                  <path
+                    d="M8.3218 11.9048C6.73038 11.9048 5.43591 13.2004 5.43591 14.7931C5.43591 15.903 6.06691 16.8688 6.98556 17.3517C6.64223 16.8781 6.43808 16.2977 6.43808 15.6661C6.43808 14.0734 7.73255 12.7778 9.324 12.7778C9.62093 12.7778 9.90856 12.8288 10.1777 12.9124V9.40192C9.89927 9.36473 9.61628 9.34149 9.324 9.34149C9.27294 9.34149 9.22654 9.34614 9.1755 9.34614V12.0394C8.90176 11.9558 8.61873 11.9048 8.3218 11.9048Z"
+                  />
+                  <path
+                    d="M19.4245 6.67608V9.34614C17.6429 9.34614 15.9912 8.77501 14.6456 7.80911V14.7977C14.6456 18.2851 11.8108 21.127 8.32172 21.127C6.97621 21.127 5.7235 20.6998 4.69812 19.98C5.8534 21.2198 7.50049 22 9.32392 22C12.8083 22 15.6478 19.1627 15.6478 15.6707V8.68211C16.9933 9.64801 18.645 10.2191 20.4267 10.2191V6.78293C20.0787 6.78293 19.7446 6.74574 19.4245 6.67608Z"
+                  />
+                  <path
+                    d="M14.6456 14.7977V7.80911C15.9912 8.77501 17.6429 9.34614 19.4245 9.34614V6.67608C18.3945 6.45788 17.4899 5.90063 16.8218 5.1344C15.7454 4.43326 14.9704 3.3095 14.7245 2H12.2098L12.2051 15.7775C12.1495 17.3192 10.8782 18.5591 9.32393 18.5591C8.35884 18.5591 7.50977 18.0808 6.98085 17.3564C6.06219 16.8688 5.4312 15.9076 5.4312 14.7977C5.4312 13.205 6.72567 11.9094 8.31708 11.9094C8.61402 11.9094 8.90168 11.9605 9.17079 12.0441V9.35079C5.75598 9.42509 3 12.2298 3 15.6707C3 17.3331 3.64492 18.847 4.69812 19.98C5.7235 20.6998 6.97621 21.127 8.32172 21.127C11.8061 21.127 14.6456 18.2851 14.6456 14.7977Z"
+                  />
+                </svg>
+                <span>Douyin</span>
+              </div>
+              <div class="chip">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 48 48"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect
+                    width="37"
+                    height="37"
+                    x="5.5"
+                    y="5.5"
+                    fill="none"
+                    rx="4"
+                    ry="4"
+                  />
+                  <path
+                    fill="none"
+                    d="M32.254 19.374v9.252m-5.781-7.776v7.776M24.95 20.85h3.047m-4.038 7.776h4.803m1.599-7.776h4.13c.49 0 .885.396.885.885v2.696"
+                  />
+                  <path
+                    fill="none"
+                    d="M29.815 24.43h7.194a.99.99 0 0 1 .99.991v2.214a.99.99 0 0 1-.99.99h-1.83m1.859-7.308l.962-.89m-16.316 8.199h-2.118m-2.378-6.655l.697 5.07m-7.202-5.07L10 27.3m3.922-7.926v7.892c0 .75-.609 1.36-1.36 1.36H12.2m9.484-9.252l-1.367 3.253h1.866l-1.367 3.252h1.865"
+                  />
+                </svg>
+                <span>RedNote</span>
+              </div>
+              <div class="chip">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  shape-rendering="geometricPrecision"
+                  text-rendering="geometricPrecision"
+                  image-rendering="optimizeQuality"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  viewBox="0 0 512 512"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M105 0h302c57.75 0 105 47.25 105 105v302c0 57.75-47.25 105-105 105H105C47.25 512 0 464.75 0 407V105C0 47.25 47.25 0 105 0z"
+                  />
+                  <path
+                    fill="#fff"
+                    fill-rule="nonzero"
+                    d="M337.36 243.58c-1.46-.7-2.95-1.38-4.46-2.02-2.62-48.36-29.04-76.05-73.41-76.33-25.6-.17-48.52 10.27-62.8 31.94l24.4 16.74c10.15-15.4 26.08-18.68 37.81-18.68h.4c14.61.09 25.64 4.34 32.77 12.62 5.19 6.04 8.67 14.37 10.39 24.89-12.96-2.2-26.96-2.88-41.94-2.02-42.18 2.43-69.3 27.03-67.48 61.21.92 17.35 9.56 32.26 24.32 42.01 12.48 8.24 28.56 12.27 45.26 11.35 22.07-1.2 39.37-9.62 51.45-25.01 9.17-11.69 14.97-26.84 17.53-45.92 10.51 6.34 18.3 14.69 22.61 24.73 7.31 17.06 7.74 45.1-15.14 67.96-20.04 20.03-44.14 28.69-80.55 28.96-40.4-.3-70.95-13.26-90.81-38.51-18.6-23.64-28.21-57.79-28.57-101.5.36-43.71 9.97-77.86 28.57-101.5 19.86-25.25 50.41-38.21 90.81-38.51 40.68.3 71.76 13.32 92.39 38.69 10.11 12.44 17.73 28.09 22.76 46.33l28.59-7.63c-6.09-22.45-15.67-41.8-28.72-57.85-26.44-32.53-65.1-49.19-114.92-49.54h-.2c-49.72.35-87.96 17.08-113.64 49.73-22.86 29.05-34.65 69.48-35.04 120.16v.24c.39 50.68 12.18 91.11 35.04 120.16 25.68 32.65 63.92 49.39 113.64 49.73h.2c44.2-.31 75.36-11.88 101.03-37.53 33.58-33.55 32.57-75.6 21.5-101.42-7.94-18.51-23.08-33.55-43.79-43.48zm-76.32 71.76c-18.48 1.04-37.69-7.26-38.64-25.03-.7-13.18 9.38-27.89 39.78-29.64 3.48-.2 6.9-.3 10.25-.3 11.04 0 21.37 1.07 30.76 3.13-3.5 43.74-24.04 50.84-42.15 51.84z"
+                  />
+                </svg>
+                <span>Threads</span>
+              </div>
+              <div class="chip">
+                <svg
+                  viewBox="0 0 20 20"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M173.876,7239 C168.399,7239 164,7243.43481 164,7248.95866 C164,7253.05869 166.407,7256.48916 169.893,7258.07936 C169.893,7256.21186 169.88,7256.45286 171.303,7250.38046 C170.521,7248.80236 171.129,7246.19673 172.88,7246.19673 C175.31,7246.19673 173.659,7249.79964 173.378,7251.2174 C173.129,7252.30544 173.959,7253.14238 174.955,7253.14238 C176.864,7253.14238 178.108,7250.71524 178.108,7247.87063 C178.108,7245.69456 176.615,7244.10437 174.042,7244.10437 C169.467,7244.10437 168.307,7249.19966 169.893,7250.79893 C170.292,7251.40294 169.893,7251.43118 169.893,7252.22174 C169.616,7253.05768 167.403,7251.84259 167.403,7248.70757 C167.403,7245.86195 169.727,7242.51518 174.457,7242.51518 C178.191,7242.51518 180.681,7245.27609 180.681,7248.2054 C180.681,7252.13805 178.523,7254.98366 175.37,7254.98366 C174.291,7254.98366 173.295,7254.3978 172.963,7253.72824 C172.36,7256.07371 172.238,7257.26258 171.303,7258.58153 C172.216,7258.83261 173.129,7259 174.125,7259 C179.602,7259 184,7254.56519 184,7249.04235 C183.752,7243.43481 179.353,7239 173.876,7239"
+                    transform="translate(-164.000000, -7239.000000)"
+                  />
+                </svg>
+                <span>Pinterest</span>
+              </div>
+              <div class="chip">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                >
+                  <path
+                    d="m24 6.124c0-.029.001-.063.001-.097 0-.743-.088-1.465-.253-2.156l.013.063c-.312-1.291-1.1-2.359-2.163-3.031l-.02-.012c-.536-.35-1.168-.604-1.847-.723l-.03-.004c-.463-.084-1.003-.138-1.553-.15h-.011c-.04 0-.083-.01-.124-.013h-12.025c-.152.01-.3.017-.455.026-.791.016-1.542.161-2.242.415l.049-.015c-1.306.501-2.327 1.495-2.853 2.748l-.012.033c-.17.409-.297.885-.36 1.38l-.003.028c-.051.343-.087.751-.1 1.165v.016c0 .032-.007.062-.01.093v12.224c.01.14.017.283.027.424.02.861.202 1.673.516 2.416l-.016-.043c.609 1.364 1.774 2.387 3.199 2.792l.035.009c.377.111.817.192 1.271.227l.022.001c.555.053 1.11.06 1.667.06h11.028c.554 0 1.099-.037 1.633-.107l-.063.007c.864-.096 1.645-.385 2.321-.823l-.021.013c.825-.539 1.47-1.29 1.867-2.176l.013-.032c.166-.383.295-.829.366-1.293l.004-.031c.084-.539.132-1.161.132-1.794 0-.086-.001-.171-.003-.256v.013q0-5.7 0-11.394zm-6.424 3.99v5.712c.001.025.001.054.001.083 0 .407-.09.794-.252 1.14l.007-.017c-.273.562-.771.979-1.373 1.137l-.015.003c-.316.094-.682.156-1.06.173h-.01c-.029.002-.062.002-.096.002-1.033 0-1.871-.838-1.871-1.871 0-.741.431-1.382 1.056-1.685l.011-.005c.293-.14.635-.252.991-.32l.027-.004c.378-.082.758-.153 1.134-.24.264-.045.468-.252.51-.513v-.003c.013-.057.02-.122.02-.189 0-.002 0-.003 0-.005q0-2.723 0-5.443c-.001-.066-.01-.130-.027-.19l.001.005c-.026-.134-.143-.235-.283-.235-.006 0-.012 0-.018.001h.001c-.178.013-.34.036-.499.07l.024-.004q-1.14.225-2.28.456l-3.7.748c-.016 0-.032.01-.048.013-.222.03-.392.219-.392.447 0 .015.001.03.002.045v-.002.13q0 3.9 0 7.801c.001.028.001.062.001.095 0 .408-.079.797-.224 1.152l.007-.021c-.264.614-.792 1.072-1.436 1.235l-.015.003c-.319.096-.687.158-1.067.172h-.008c-.031.002-.067.003-.104.003-.913 0-1.67-.665-1.815-1.536l-.001-.011c-.02-.102-.031-.218-.031-.338 0-.785.485-1.458 1.172-1.733l.013-.004c.315-.127.687-.234 1.072-.305l.036-.005c.287-.06.575-.116.86-.177.341-.05.6-.341.6-.693 0-.007 0-.015 0-.022v.001-.15q0-4.44 0-8.883c0-.002 0-.004 0-.007 0-.129.015-.254.044-.374l-.002.011c.066-.264.277-.466.542-.517l.004-.001c.255-.066.515-.112.774-.165.733-.15 1.466-.3 2.2-.444l2.27-.46c.67-.134 1.34-.27 2.01-.4.181-.042.407-.079.637-.104l.027-.002c.018-.002.04-.004.061-.004.27 0 .489.217.493.485.008.067.012.144.012.222v.001q0 2.865 0 5.732z"
+                  />
+                </svg>
+                <span>Apple Music</span>
+              </div>
+              <div class="chip">
+                <svg
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                >
+                  <path
+                    d="M22.676 0H1.324C.593 0 0 .593 0 1.324v21.352C0 23.408.593 24 1.324 24h11.494v-9.294H9.691v-3.622h3.127V8.412c0-3.1 1.893-4.788 4.658-4.788 1.325 0 2.464.099 2.796.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.324-.592 1.324-1.324V1.324C24 .593 23.408 0 22.676 0z"
+                  />
+                </svg>
+                <span>Facebook</span>
+              </div>
+              <div class="chip">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                >
+                  <path d="M0 18.75l7.437-13.5H24l-7.438 13.5H0z" />
+                </svg>
+                <span>Bandcamp</span>
+              </div>
+              <div class="chip">
+                <svg
+                  role="img"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                >
+                  <title>pixiv</title>
+                  <path
+                    d="M4.935 0A4.924 4.924 0 0 0 0 4.935v14.13A4.924 4.924 0 0 0 4.935 24h14.13A4.924 4.924 0 0 0 24 19.065V4.935A4.924 4.924 0 0 0 19.065 0zm7.81 4.547c2.181 0 4.058.676 5.399 1.847a6.118 6.118 0 0 1 2.116 4.66c.005 1.854-.88 3.476-2.257 4.563-1.375 1.092-3.225 1.697-5.258 1.697-2.314 0-4.46-.842-4.46-.842v2.718c.397.116 1.048.365.635.779H5.79c-.41-.41.19-.65.644-.779V7.666c-1.053.81-1.593 1.51-1.868 2.031.32 1.02-.284.969-.284.969l-1.09-1.73s3.868-4.39 9.553-4.39zm-.19.971c-1.423-.003-3.184.473-4.27 1.244v8.646c.988.487 2.484.832 4.26.832h.01c1.596 0 2.98-.593 3.93-1.533.952-.948 1.486-2.183 1.492-3.683-.005-1.54-.504-2.864-1.42-3.86-.918-.992-2.274-1.645-4.002-1.646Z"
+                  />
+                </svg>
+                <span>Pixiv</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- History Page -->
+        <div id="historyPage" class="page-content hidden">
+          <div class="page-header history-header">
+            <div class="header-main">
+              <h2 data-i18n="nav-history">History</h2>
+              <p data-i18n="history-desc">Your recent downloads</p>
+            </div>
+            <div class="history-actions-wrapper">
+              <button id="editHistoryBtn" class="edit-btn" data-i18n="btn-edit">
+                EDIT
+              </button>
+              <div id="historyActions" class="history-actions hidden">
+                <button
+                  id="clearAllBtn"
+                  class="clear-all-btn"
+                  data-i18n="btn-clear-all"
+                >
+                  CLEAR ALL
+                </button>
+                <button id="doneEditBtn" class="done-btn" data-i18n="btn-done">
+                  DONE
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="empty-state">
+            <p>No history yet.</p>
+          </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div id="settingsPage" class="page-content hidden">
+          <!-- Main Settings Menu -->
+          <div id="settingsMainMenu">
+            <div class="page-header">
+              <h2 data-i18n="nav-settings">Settings</h2>
+              <p data-i18n="settings-desc">Configure your experience</p>
+            </div>
+
+            <div class="settings-menu-list">
+              <div class="settings-menu-item" data-target="settingsGeneral">
+                <div class="menu-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.70-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"
+                    />
+                  </svg>
+                </div>
+                <div class="menu-text">
+                  <div class="menu-title" data-i18n="menu-general-title">
+                    General
+                  </div>
+                  <div class="menu-desc" data-i18n="menu-general-desc">
+                    Language, Automation & App Security
+                  </div>
+                </div>
+              </div>
+
+              <div class="settings-menu-item" data-target="settingsAppearance">
+                <div class="menu-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"
+                    />
+                  </svg>
+                </div>
+                <div class="menu-text">
+                  <div class="menu-title" data-i18n="menu-appearance-title">
+                    Look & feel
+                  </div>
+                  <div class="menu-desc" data-i18n="menu-appearance-desc">
+                    Theme, Color Accent & Haptics
+                  </div>
+                </div>
+              </div>
+
+              <div class="settings-menu-item" data-target="settingsStorage">
+                <div class="menu-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"
+                    />
+                  </svg>
+                </div>
+                <div class="menu-text">
+                  <div class="menu-title" data-i18n="menu-storage-title">
+                    Storage & Download
+                  </div>
+                  <div class="menu-desc" data-i18n="menu-storage-desc">
+                    Save Paths, Filename & Cache Cleaning
+                  </div>
+                </div>
+              </div>
+
+              <div class="settings-menu-item" data-target="settingsNetwork">
+                <div class="menu-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"
+                    />
+                  </svg>
+                </div>
+                <div class="menu-text">
+                  <div class="menu-title" data-i18n="menu-network-title">
+                    Network & Performance
+                  </div>
+                  <div class="menu-desc" data-i18n="menu-network-desc">
+                    Preferred Server, User-Agent & Data Saver
+                  </div>
+                </div>
+              </div>
+
+              <div class="settings-menu-item" data-target="settingsScraper">
+                <div class="menu-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"
+                    />
+                  </svg>
+                </div>
+                <div class="menu-text">
+                  <div class="menu-title" data-i18n="menu-scraper-title">
+                    Scraper Engine & Status
+                  </div>
+                  <div class="menu-desc" data-i18n="menu-scraper-desc">
+                    Scraper Engine & Status
+                  </div>
+                </div>
+              </div>
+
+              <div class="settings-menu-item" data-target="settingsAdvanced">
+                <div class="menu-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                    />
+                  </svg>
+                </div>
+                <div class="menu-text">
+                  <div class="menu-title" data-i18n="menu-advanced-title">
+                    Advanced
+                  </div>
+                  <div class="menu-desc" data-i18n="menu-advanced-desc">
+                    History Retention, Auto-Backup & Player
+                  </div>
+                </div>
+              </div>
+
+              <div class="settings-menu-item" data-target="settingsAbout">
+                <div class="menu-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"
+                    />
+                  </svg>
+                </div>
+                <div class="menu-text">
+                  <div class="menu-title" data-i18n="menu-about-title">
+                    About & Help
+                  </div>
+                  <div class="menu-desc" data-i18n="menu-about-desc">
+                    Version, Help, Developer links
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub-page: General -->
+          <div id="settingsGeneral" class="settings-sub-page hidden">
+            <div class="sub-page-header">
+              <button class="back-btn-settings" aria-label="Back">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+                  />
+                </svg>
+              </button>
+              <h3 data-i18n="menu-general-title">General</h3>
+            </div>
+            <div class="settings-list">
+              <!-- Language -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"
+                    />
+                  </svg>
+                  <span data-i18n="label-language">Language</span>
+                </div>
+                <div class="custom-select" id="languageSelect">
+                  <div class="selected-text" id="currentLangDisplay">
+                    English
+                  </div>
+                  <div class="dropdown-arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                    >
+                      <path d="M7 10l5 5 5-5z" />
+                    </svg>
+                  </div>
+                  <div class="dropdown-menu hidden" id="languageMenu">
+                    <div
+                      class="dropdown-item"
+                      data-value="en"
+                      data-i18n="lang-en"
+                    >
+                      English
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="id"
+                      data-i18n="lang-id"
+                    >
+                      Indonesia
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="ja"
+                      data-i18n="lang-ja"
+                    >
+                      日本語
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Auto-Paste Link -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M19 2h-4.18C14.4.84 13.3 0 12 0c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 18H5V4h2v3h10V4h2v16z"
+                    />
+                  </svg>
+                  <span data-i18n="label-autopaste">Auto-Paste Link</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="autoPasteToggle" />
+                  <label for="autoPasteToggle"></label>
+                </div>
+              </div>
+              <!-- Auto-Analyze on Paste -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                    />
+                  </svg>
+                  <span data-i18n="label-auto-analyze"
+                    >Auto-Analyze on Paste</span
+                  >
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="autoAnalyzeToggle" />
+                  <label for="autoAnalyzeToggle"></label>
+                </div>
+              </div>
+              <!-- Privacy Lock -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"
+                    />
+                  </svg>
+                  <span data-i18n="label-privacy-lock">Privacy Lock</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="privacyLockToggle" />
+                  <label for="privacyLockToggle"></label>
+                </div>
+              </div>
+              <!-- Lock Type -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2C9.24 2 7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2h-1V7c0-2.76-2.24-5-5-5zm3 8H9V7c0-1.66 1.34-3 3-3s3 1.34 3 3v3z"
+                    />
+                  </svg>
+                  <span data-i18n="label-lock-type">Lock Type</span>
+                </div>
+                <div class="custom-select" id="lockTypeSelect">
+                  <div class="selected-text" id="lockTypeText">None</div>
+                  <div class="dropdown-arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                    >
+                      <path d="M7 10l5 5 5-5z" />
+                    </svg>
+                  </div>
+                  <div class="dropdown-menu hidden" id="lockTypeMenu">
+                    <div
+                      class="dropdown-item"
+                      data-value="none"
+                      data-i18n="lock-type-none"
+                    >
+                      None
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="biometric"
+                      data-i18n="lock-type-biometric"
+                    >
+                      Biometric
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Incognito Mode -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.3 6 2H6c.2-.7 3.3-2 6-2m0-12C9.8 4 8 5.8 8 8s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4m0 10c-4.4 0-8 1.8-8 4v2h16v-2c0-2.2-3.6-4-8-4z"
+                    />
+                  </svg>
+                  <span data-i18n="label-incognito">Incognito Mode</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="incognitoToggle" />
+                  <label for="incognitoToggle"></label>
+                </div>
+              </div>
+              <!-- Keep Screen Awake -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"
+                    />
+                  </svg>
+                  <span data-i18n="label-keep-awake">Keep Screen Awake</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="keepAwakeToggle" />
+                  <label for="keepAwakeToggle"></label>
+                </div>
+              </div>
+              <!-- Auto Check Updates -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M21 10.12h-6.78l2.74-2.82c-2.73-2.7-7.15-2.8-9.88-.1-2.73 2.71-2.73 7.08 0 9.79 2.73 2.71 7.15 2.71 9.88 0C18.32 15.65 19 14 19 12h2c0 2.56-1 5.12-2.93 7.07-3.91 3.91-10.24 3.91-14.14 0-3.91-3.91-3.91-10.24 0-14.14c3.91-3.91 10.24-3.91 14.14 0L21 2v8.12z"
+                    />
+                  </svg>
+                  <span data-i18n="label-auto-update">Auto Check Updates</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="autoUpdateToggle" />
+                  <label for="autoUpdateToggle"></label>
+                </div>
+              </div>
+              <!-- Auto-Clear Input -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                    />
+                  </svg>
+                  <span data-i18n="label-auto-clear-input"
+                    >Auto-Clear Input</span
+                  >
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="autoClearInputToggle" />
+                  <label for="autoClearInputToggle"></label>
+                </div>
+              </div>
+              <!-- Auto-Download Link -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M13 11.33L18 18H6l5-6.67V4h2v7.33zM12 2c-1.1 0-2 .9-2 2v7.33L5 18c-.67.89-.03 2.15 1.1 2.15h11.8c1.13 0 1.77-1.26 1.1-2.15L14 11.33V4c0-1.1-.9-2-2-2z"
+                    />
+                  </svg>
+                  <span data-i18n="label-autodownload">Auto-Download Link</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="autoDownloadToggle" />
+                  <label for="autoDownloadToggle"></label>
+                </div>
+              </div>
+              <!-- Auto-Retry Download -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"
+                    />
+                  </svg>
+                  <span data-i18n="label-auto-retry">Auto-Retry Download</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="autoRetryToggle" />
+                  <label for="autoRetryToggle"></label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub-page: Appearance -->
+          <div id="settingsAppearance" class="settings-sub-page hidden">
+            <div class="sub-page-header">
+              <button class="back-btn-settings" aria-label="Back">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+                  />
+                </svg>
+              </button>
+              <h3 data-i18n="menu-appearance-title">Look & feel</h3>
+            </div>
+            <div class="settings-list">
+              <!-- Dark Mode -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"
+                    />
+                  </svg>
+                  <span data-i18n="label-darkmode">Dark Mode</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="darkModeToggle" />
+                  <label for="darkModeToggle"></label>
+                </div>
+              </div>
+              <!-- Color Accent -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 100-16 8 8 0 000 16zm-5-8h10v2H7v-2z"
+                    />
+                  </svg>
+                  <span data-i18n="label-color-accent">Color Accent</span>
+                </div>
+                <div class="custom-select" id="colorAccentSelect">
+                  <div class="selected-text" id="colorAccentText">Classic</div>
+                  <div class="dropdown-arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                    >
+                      <path d="M7 10l5 5 5-5z" />
+                    </svg>
+                  </div>
+                  <div class="dropdown-menu hidden" id="colorAccentMenu">
+                    <div
+                      class="dropdown-item"
+                      data-value="black"
+                      data-i18n="accent-black"
+                    >
+                      Classic
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="blue"
+                      data-i18n="accent-blue"
+                    >
+                      Ocean
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="green"
+                      data-i18n="accent-green"
+                    >
+                      Forest
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="purple"
+                      data-i18n="accent-purple"
+                    >
+                      Royal
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="orange"
+                      data-i18n="accent-orange"
+                    >
+                      Sunset
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- App Font -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M9.93 13.5h4.14L12 7.98zM20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-4.05 16.5l-1.14-3H9.17l-1.12 3H5.96l5.11-13h1.86l5.11 13h-2.09z"
+                    />
+                  </svg>
+                  <span data-i18n="label-font">App Font</span>
+                </div>
+                <div class="custom-select" id="fontSelect">
+                  <div class="selected-text" id="fontText">Default</div>
+                  <div class="dropdown-arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                    >
+                      <path d="M7 10l5 5 5-5z" />
+                    </svg>
+                  </div>
+                  <div class="dropdown-menu hidden" id="fontMenu">
+                    <div
+                      class="dropdown-item"
+                      data-value="default"
+                      data-i18n="font-default"
+                    >
+                      Default
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="jakarta"
+                      data-i18n="font-jakarta"
+                    >
+                      Plus Jakarta Sans
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="serif"
+                      data-i18n="font-serif"
+                    >
+                      Classic Serif
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="mono"
+                      data-i18n="font-mono"
+                    >
+                      Modern Mono
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="display"
+                      data-i18n="font-display"
+                    >
+                      Display Bold
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Vibration & Haptics -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M0 15h2V9H0v6zm3 2h2V7H3v10zm19-8v6h2V9h-2zm-3 8h2V7h-2v10zM16.5 3h-9C6.67 3 6 3.67 6 4.5v15c0 .83.67 1.5 1.5 1.5h9c.83 0 1.5-.67 1.5-1.5v-15c0-.83-.67-1.5-1.5-1.5zM15 18H9V6h6v12z"
+                    />
+                  </svg>
+                  <span data-i18n="label-haptic">Vibration & Haptics</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="hapticToggle" />
+                  <label for="hapticToggle"></label>
+                </div>
+              </div>
+              <!-- Download Completion Sound -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"
+                    />
+                  </svg>
+                  <span data-i18n="label-download-sound">Completion Sound</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="downloadSoundToggle" />
+                  <label for="downloadSoundToggle"></label>
+                </div>
+              </div>
+              <!-- Header Quote -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" />
+                  </svg>
+                  <span data-i18n="label-header-quote">Header Quote</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="headerQuoteToggle" />
+                  <label for="headerQuoteToggle"></label>
+                </div>
+              </div>
+              <!-- Home Greeting -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"
+                    />
+                  </svg>
+                  <span data-i18n="label-home-greeting">Home Greeting</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="greetingToggle" />
+                  <label for="greetingToggle"></label>
+                </div>
+              </div>
+              <!-- Footer Tagline -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 14H4c-.55 0-1-.45-1-1v-2h18v2c0 .55-.45 1-1 1z"
+                    />
+                  </svg>
+                  <span data-i18n="label-footer-quote">Footer Tagline</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="footerQuoteToggle" />
+                  <label for="footerQuoteToggle"></label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub-page: Storage -->
+          <div id="settingsStorage" class="settings-sub-page hidden">
+            <div class="sub-page-header">
+              <button class="back-btn-settings" aria-label="Back">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+                  />
+                </svg>
+              </button>
+              <h3 data-i18n="menu-storage-title">Storage & Download</h3>
+            </div>
+            <div class="settings-list">
+              <!-- Video Path -->
+              <div class="settings-item action-item" id="changePathBtn">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"
+                    />
+                  </svg>
+                  <span data-i18n="label-path-video">Video Path</span>
+                </div>
+                <span class="info-val" id="pathVal">/Download/Zenith</span>
+              </div>
+              <!-- Music Path -->
+              <div class="settings-item action-item" id="changeMusicPathBtn">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"
+                    />
+                  </svg>
+                  <span data-i18n="label-path-music">Music Path</span>
+                </div>
+                <span class="info-val" id="musicPathVal"
+                  >/Download/Zenith/Music</span
+                >
+              </div>
+              <!-- Subfolder per Platform -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
+                    />
+                  </svg>
+                  <span data-i18n="label-auto-folder"
+                    >Subfolder per Platform</span
+                  >
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="autoFolderToggle" />
+                  <label for="autoFolderToggle"></label>
+                </div>
+              </div>
+              <!-- Filename Template -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                    />
+                  </svg>
+                  <span data-i18n="label-filename-template">Filename</span>
+                </div>
+                <div class="custom-select" id="filenameSelect">
+                  <div class="selected-text" id="filenameText">Default</div>
+                  <div class="dropdown-arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                    >
+                      <path d="M7 10l5 5 5-5z" />
+                    </svg>
+                  </div>
+                  <div class="dropdown-menu hidden" id="filenameMenu">
+                    <div
+                      class="dropdown-item"
+                      data-value="default"
+                      data-i18n="filename-default"
+                    >
+                      Default
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="title"
+                      data-i18n="filename-title"
+                    >
+                      Title Only
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="title-platform"
+                      data-i18n="filename-title-platform"
+                    >
+                      Title + Platform
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="title-date"
+                      data-i18n="filename-title-date"
+                    >
+                      Title + Date
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Total Media Size -->
+              <div class="settings-item info-only">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2C6.48 2 2 4.24 2 7v10c0 2.76 4.48 5 10 5s10-2.24 10-5V7c0-2.76-4.48-5-10-5zm0 2c3.11 0 6 .9 7.42 2-1.42 1.1-4.31 2-7.42 2s-6-.9-7.42-2c1.42-1.1 4.31-2 7.42-2zm0 14c-3.11 0-6-.9-7.42-2 1.42 1.1 4.31 2 7.42 2s6-.9 7.42-2c-1.42 1.1-4.31 2-7.42 2zm0-4c-3.11 0-6-.9-7.42-2 1.42 1.1 4.31 2 7.42 2s6-.9 7.42-2c-1.42 1.1-4.31 2-7.42 2zm0-4c-3.11 0-6-.9-7.42-2 1.42 1.1 4.31 2 7.42 2s6-.9 7.42-2c-1.42 1.1-4.31 2-7.42 2z"
+                    />
+                  </svg>
+                  <span data-i18n="label-storagesize">Total Media Size</span>
+                </div>
+                <span class="info-val" id="storageSizeVal">0 MB</span>
+              </div>
+              <!-- Clear Cache -->
+              <div class="settings-item action-item" id="clearCacheBtn">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M15 4V3H9v1H4v2h16V4h-5zM5 8v12c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V8H5zm7 11h-2v-8h2v8zm4 0h-2v-8h2v8z"
+                    />
+                  </svg>
+                  <span data-i18n="label-clearcache">Clear Cache</span>
+                </div>
+                <span class="action-label" data-i18n="btn-clear">CLEAR</span>
+              </div>
+              <!-- Wipe All Data -->
+              <div class="settings-item action-item" id="wipeDataBtn">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+                      transform="rotate(45 12 12)"
+                    />
+                  </svg>
+                  <span data-i18n="label-wipedata">Wipe All Data</span>
+                </div>
+                <span class="action-label" data-i18n="btn-reset">RESET</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub-page: Network & Performance -->
+          <div id="settingsNetwork" class="settings-sub-page hidden">
+            <div class="sub-page-header">
+              <button class="back-btn-settings" aria-label="Back">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+                  />
+                </svg>
+              </button>
+              <h3 data-i18n="menu-network-title">Network & Performance</h3>
+            </div>
+            <div class="settings-list">
+              <!-- Preferred Server -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M19 15v4H5v-4h14m1-2H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1v-6c0-.55-.45-1-1-1zM7 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM19 5v4H5V5h14m1-2H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1zM7 8.5c-.83 0-1.5-.67-1.5-1.5S6.17 5.5 7 5.5s1.5.67 1.5 1.5S7.83 8.5 7 8.5z"
+                    />
+                  </svg>
+                  <span data-i18n="label-prefer-server">Preferred Server</span>
+                </div>
+                <div class="custom-select" id="preferServerSelect">
+                  <div
+                    class="selected-text"
+                    id="preferServerText"
+                    data-i18n="server-ask"
+                  >
+                    Always Ask
+                  </div>
+                  <div class="dropdown-arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                    >
+                      <path d="M7 10l5 5 5-5z" />
+                    </svg>
+                  </div>
+                  <div class="dropdown-menu hidden" id="preferServerMenu">
+                    <div
+                      class="dropdown-item"
+                      data-value="ask"
+                      data-i18n="server-ask"
+                    >
+                      Always Ask
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="server1"
+                      data-i18n="server-1"
+                    >
+                      Server 1 (Primary)
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="server2"
+                      data-i18n="server-2"
+                    >
+                      Server 2 (Backup)
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- User-Agent Mode -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"
+                    />
+                  </svg>
+                  <span data-i18n="label-user-agent">User-Agent</span>
+                </div>
+                <div class="custom-select" id="userAgentSelect">
+                  <div class="selected-text" id="userAgentText">Default</div>
+                  <div class="dropdown-arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                    >
+                      <path d="M7 10l5 5 5-5z" />
+                    </svg>
+                  </div>
+                  <div class="dropdown-menu hidden" id="userAgentMenu">
+                    <div
+                      class="dropdown-item"
+                      data-value="default"
+                      data-i18n="ua-default"
+                    >
+                      Default (Scraper)
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="chrome"
+                      data-i18n="ua-chrome"
+                    >
+                      Mobile Chrome
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="safari"
+                      data-i18n="ua-safari"
+                    >
+                      iOS Safari
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="desktop"
+                      data-i18n="ua-desktop"
+                    >
+                      Desktop Chrome
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Request Timeout Limit -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"
+                    />
+                  </svg>
+                  <span data-i18n="label-request-timeout">Timeout Limit</span>
+                </div>
+                <div class="custom-select" id="requestTimeoutSelect">
+                  <div class="selected-text" id="requestTimeoutText">
+                    30 Seconds
+                  </div>
+                  <div class="dropdown-arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                    >
+                      <path d="M7 10l5 5 5-5z" />
+                    </svg>
+                  </div>
+                  <div class="dropdown-menu hidden" id="requestTimeoutMenu">
+                    <div
+                      class="dropdown-item"
+                      data-value="15"
+                      data-i18n="timeout-15"
+                    >
+                      15 Seconds
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="30"
+                      data-i18n="timeout-30"
+                    >
+                      30 Seconds
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="60"
+                      data-i18n="timeout-60"
+                    >
+                      60 Seconds
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="120"
+                      data-i18n="timeout-120"
+                    >
+                      120 Seconds
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Download via Wi-Fi Only -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 4.5c2.97 0 5.67 1.12 7.74 2.97L12 18.24 4.26 11.47C6.33 9.62 9.03 8.5 12 8.5z"
+                    />
+                  </svg>
+                  <span data-i18n="label-wifi-only"
+                    >Download via Wi-Fi Only</span
+                  >
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="wifiOnlyToggle" />
+                  <label for="wifiOnlyToggle"></label>
+                </div>
+              </div>
+              <!-- Force IPv4 Mode -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M15 11V5l-3-3-3 3v6H3v2h6v6l3 3 3-3v-6h6v-2h-6zm-2 7.17l-1 1-1-1V13h2v5.17zM12 4.83l1 1v5.17h-2V5.83l1-1z"
+                    />
+                  </svg>
+                  <span data-i18n="label-force-ipv4">Force IPv4 Mode</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="forceIpv4Toggle" />
+                  <label for="forceIpv4Toggle"></label>
+                </div>
+              </div>
+              <!-- Anti-403 Header Guard -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"
+                    />
+                  </svg>
+                  <span data-i18n="label-header-spoofing"
+                    >Anti-403 Header Guard</span
+                  >
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="headerSpoofingToggle" />
+                  <label for="headerSpoofingToggle"></label>
+                </div>
+              </div>
+              <!-- Cellular Data Warning Guard -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"
+                    />
+                  </svg>
+                  <span data-i18n="label-cellular-warning"
+                    >Cellular Warning</span
+                  >
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="cellularWarningToggle" />
+                  <label for="cellularWarningToggle"></label>
+                </div>
+              </div>
+              <!-- Bypass SSL Errors -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"
+                    />
+                  </svg>
+                  <span data-i18n="label-bypass-ssl">Bypass SSL Errors</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="bypassSslToggle" />
+                  <label for="bypassSslToggle"></label>
+                </div>
+              </div>
+              <!-- Check Server Latency -->
+              <div class="settings-item action-item" id="testLatencyBtn">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+                    />
+                  </svg>
+                  <span data-i18n="label-test-latency"
+                    >Check Server Latency</span
+                  >
+                </div>
+                <span
+                  class="info-val"
+                  id="latencyResultVal"
+                  data-i18n="btn-check"
+                  >TEST</span
+                >
+              </div>
+              <!-- Data Saver Mode -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M20 10c0-4.41-3.59-8-8-8s-8 3.59-8 8c0 3.35 2.07 6.22 5 7.41V20c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-2.59c2.93-1.19 5-4.06 5-7.41zM12 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"
+                    />
+                  </svg>
+                  <span data-i18n="label-datasaver">Data Saver Mode</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="dataSaverToggle" />
+                  <label for="dataSaverToggle"></label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub-page: Advanced -->
+          <div id="settingsAdvanced" class="settings-sub-page hidden">
+            <div class="sub-page-header">
+              <button class="back-btn-settings" aria-label="Back">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+                  />
+                </svg>
+              </button>
+              <h3 data-i18n="menu-advanced-title">Advanced</h3>
+            </div>
+            <div class="settings-list">
+              <!-- History Limit -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"
+                    />
+                  </svg>
+                  <span data-i18n="label-history-limit">History Limit</span>
+                </div>
+                <div class="custom-select" id="historyLimitSelect">
+                  <div class="selected-text" id="historyLimitText">
+                    Unlimited
+                  </div>
+                  <div class="dropdown-arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                    >
+                      <path d="M7 10l5 5 5-5z" />
+                    </svg>
+                  </div>
+                  <div class="dropdown-menu hidden" id="historyLimitMenu">
+                    <div
+                      class="dropdown-item"
+                      data-value="unlimited"
+                      data-i18n="history-unlimited"
+                    >
+                      Unlimited
+                    </div>
+                    <div class="dropdown-item" data-value="50">50</div>
+                    <div class="dropdown-item" data-value="100">100</div>
+                    <div class="dropdown-item" data-value="200">200</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Auto-Clear History -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"
+                    />
+                  </svg>
+                  <span data-i18n="label-autoclear-history"
+                    >Auto-Clear History</span
+                  >
+                </div>
+                <div class="custom-select" id="autoClearDaysSelect">
+                  <div class="selected-text" id="autoClearDaysText">Off</div>
+                  <div class="dropdown-arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                    >
+                      <path d="M7 10l5 5 5-5z" />
+                    </svg>
+                  </div>
+                  <div class="dropdown-menu hidden" id="autoClearDaysMenu">
+                    <div
+                      class="dropdown-item"
+                      data-value="off"
+                      data-i18n="days-off"
+                    >
+                      Off
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="1"
+                      data-i18n="days-1"
+                    >
+                      1 Day
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="7"
+                      data-i18n="days-7"
+                    >
+                      7 Days
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="30"
+                      data-i18n="days-30"
+                    >
+                      30 Days
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="90"
+                      data-i18n="days-90"
+                    >
+                      90 Days
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Auto Clear Cache -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"
+                    />
+                  </svg>
+                  <span data-i18n="label-autoclear-cache"
+                    >Auto Clear Cache</span
+                  >
+                </div>
+                <div class="custom-select" id="autoClearCacheDaysSelect">
+                  <div class="selected-text" id="autoClearCacheDaysText">
+                    Off
+                  </div>
+                  <div class="dropdown-arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                    >
+                      <path d="M7 10l5 5 5-5z" />
+                    </svg>
+                  </div>
+                  <div class="dropdown-menu hidden" id="autoClearCacheDaysMenu">
+                    <div
+                      class="dropdown-item"
+                      data-value="off"
+                      data-i18n="days-off"
+                    >
+                      Off
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="1"
+                      data-i18n="days-1"
+                    >
+                      1 Day
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="7"
+                      data-i18n="days-7"
+                    >
+                      7 Days
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="30"
+                      data-i18n="days-30"
+                    >
+                      30 Days
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="90"
+                      data-i18n="days-90"
+                    >
+                      90 Days
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Scheduled Auto-Backup Data -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2v9.67z"
+                    />
+                  </svg>
+                  <span data-i18n="label-auto-backup">Auto Backup Data</span>
+                </div>
+                <div class="custom-select" id="autoBackupSelect">
+                  <div class="selected-text" id="autoBackupText">Off</div>
+                  <div class="dropdown-arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                    >
+                      <path d="M7 10l5 5 5-5z" />
+                    </svg>
+                  </div>
+                  <div class="dropdown-menu hidden" id="autoBackupMenu">
+                    <div
+                      class="dropdown-item"
+                      data-value="off"
+                      data-i18n="backup-off"
+                    >
+                      Off
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="7"
+                      data-i18n="backup-weekly"
+                    >
+                      Weekly (7 Days)
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      data-value="30"
+                      data-i18n="backup-monthly"
+                    >
+                      Monthly (30 Days)
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Auto-Play Media -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"
+                    />
+                  </svg>
+                  <span data-i18n="label-autoplay">Auto-Play Media</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="autoPlayToggle" />
+                  <label for="autoPlayToggle"></label>
+                </div>
+              </div>
+              <!-- Auto-Loop Media -->
+              <div class="settings-item">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v6z"
+                    />
+                  </svg>
+                  <span data-i18n="label-autoloop">Auto-Loop Media</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="autoLoopToggle" />
+                  <label for="autoLoopToggle"></label>
+                </div>
+              </div>
+              <div class="settings-item action-item" id="exportDataBtn">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                  </svg>
+                  <span data-i18n="btn-export">Export Data</span>
+                </div>
+              </div>
+              <div class="settings-item action-item" id="importDataBtn">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z" />
+                  </svg>
+                  <span data-i18n="btn-import">Import Data</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub-page: Scraper Engine & Status -->
+          <div id="settingsScraper" class="settings-sub-page hidden">
+            <div class="sub-page-header">
+              <button class="back-btn-settings" aria-label="Back">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+                  />
+                </svg>
+              </button>
+              <div>
+                <h3 data-i18n="menu-scraper-title">Scraper Engine & Status</h3>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <!-- Check All Action Button -->
+              <div
+                class="settings-item action-item"
+                id="btnTestAllScrapers"
+                style="border-bottom: none"
+              >
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"
+                    />
+                  </svg>
+                  <span data-i18n="btn-test-all-scrapers"
+                    >Check All Scrapers Status</span
+                  >
+                </div>
+              </div>
+
+              <div class="settings-card-group" id="scraperStatusList">
+                <!-- Dynamically populated 14 scraper rows -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub-page: About & Help -->
+          <div id="settingsAbout" class="settings-sub-page hidden">
+            <div class="sub-page-header">
+              <button class="back-btn-settings" aria-label="Back">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+                  />
+                </svg>
+              </button>
+              <h3 data-i18n="menu-about-title">About & Help</h3>
+            </div>
+            <div class="settings-list">
+              <div class="settings-item action-item" id="checkUpdateBtn">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+                    />
+                  </svg>
+                  <span data-i18n="label-version">Version</span>
+                </div>
+                <div class="update-info">
+                  <span class="info-val">&nbsp;4.1.0</span>
+                  <span class="action-label" data-i18n="btn-check">CHECK</span>
+                </div>
+              </div>
+              <div class="settings-item info-only">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z"
+                    />
+                  </svg>
+                  <span data-i18n="label-platform">Platform</span>
+                </div>
+                <span class="info-val" id="platformVal">Android</span>
+              </div>
+              <div class="settings-item action-item" id="howToUseBtn">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"
+                    />
+                  </svg>
+                  <span data-i18n="label-howtouse">How to Use</span>
+                </div>
+                <span class="action-label" data-i18n="btn-view">VIEW</span>
+              </div>
+              <div class="settings-item action-item" id="aboutAppBtn">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"
+                    />
+                  </svg>
+                  <span data-i18n="label-about">About Zenith</span>
+                </div>
+                <span class="action-label" data-i18n="btn-view">VIEW</span>
+              </div>
+              <div class="settings-item action-item" id="shareAppBtn">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"
+                    />
+                  </svg>
+                  <span data-i18n="label-shareapp">Share Zenith App</span>
+                </div>
+                <span class="action-label" data-i18n="btn-share">SHARE</span>
+              </div>
+              <div class="settings-item action-item" id="reportBugBtn">
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z"
+                    />
+                  </svg>
+                  <span data-i18n="label-reportbug">Report a Bug</span>
+                </div>
+                <span class="action-label" data-i18n="btn-report">REPORT</span>
+              </div>
+            </div>
+
+            <!-- Developer Section -->
+            <div class="settings-section-divider" data-i18n="label-developer">
+              Developer
+            </div>
+            <div class="settings-list">
+              <a
+                href="https://github.com/dirrzzx948-png"
+                class="settings-item link-item"
+                target="_blank"
+              >
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2C6.477 2 2 6.477 2 12c0 4.419 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.341-3.369-1.341-.454-1.152-1.11-1.459-1.11-1.459-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z"
+                    />
+                  </svg>
+                  <span>GitHub</span>
+                </div>
+                <span class="info-val">Dirrzzx</span>
+              </a>
+              <a
+                href="tiktok.com/@hoidir24"
+                class="settings-item link-item"
+                target="_blank"
+              >
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 2 7.5 2c1.74 0 3.41.81 4.5 2.09C13.09 2.81 14.76 2 16.5 2 19.58 2 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                    />
+                  </svg>
+                  <span data-i18n="label-support">Support Me</span>
+                </div>
+                <span class="info-val">Dirrzzx</span>
+              </a>
+              <a
+                href="https://www.instagram.com/hoidir?igsh=dTIxbmU1MXBhdzRw"
+                class="settings-item link-item"
+                target="_blank"
+              >
+                <div class="item-label">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 01-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 017.8 2m-.2 2A3.6 3.6 0 004 7.6v8.8A3.6 3.6 0 007.6 20h8.8a3.6 3.6 0 003.6-3.6V7.6A3.6 3.6 0 0016.4 4H7.6m9.65 1.5a1.25 1.25 0 011.25 1.25A1.25 1.25 0 0117.25 8 1.25 1.25 0 0116 6.75a1.25 1.25 0 011.25-1.25M12 7a5 5 0 015 5 5 5 0 01-5 5 5 5 0 01-5-5 5 5 0 015-5m0 2a3 3 0 00-3 3 3 3 0 003 3 3 3 0 003-3 3 3 0 00-3-3z"
+                    />
+                  </svg>
+                  <span>Instagram</span>
+                </div>
+                <span class="info-val">Hoidir</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Modal -->
+      <div id="modalOverlay" class="modal-overlay hidden">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="modalTitle">History Detail</h3>
+            <button id="closeModal" aria-label="Close modal">
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="currentColor"
+              >
+                <path
+                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-thumb-container">
+              <div
+                id="modalSlidesWrapper"
+                style="width: 100%; position: relative"
+              ></div>
+              <div class="slider-nav hidden" id="modalSliderNav">
+                <button
+                  id="modalSlidePrevBtn"
+                  class="slide-btn"
+                  aria-label="Previous slide"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="20"
+                    height="20"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"
+                    />
+                  </svg>
+                </button>
+                <span id="modalSlideIndicator" class="slide-indicator"
+                  >1 / 1</span
+                >
+                <button
+                  id="modalSlideNextBtn"
+                  class="slide-btn"
+                  aria-label="Next slide"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="20"
+                    height="20"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="modal-info">
+              <p id="modalUrl" class="url-text"></p>
+              <button id="redownloadBtn">RE-DOWNLOAD</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <nav class="bottom-nav">
+        <a href="#" class="nav-item active" data-page="home">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+          </svg>
+          <span data-i18n="nav-home">Home</span>
+        </a>
+        <a href="#" class="nav-item" data-page="history">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path
+              d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"
+            />
+          </svg>
+          <span data-i18n="nav-history">History</span>
+        </a>
+        <a href="#" class="nav-item" data-page="settings">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path
+              d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.70-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"
+            />
+          </svg>
+          <span data-i18n="nav-settings">Settings</span>
+        </a>
+      </nav>
+      <!-- Custom Info Modal -->
+      <div id="infoOverlay" class="modal-overlay hidden">
+        <div class="modal-content info-modal">
+          <div class="modal-header">
+            <h3 id="infoTitle">Info</h3>
+            <button id="closeInfoModal" aria-label="Close info">
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="currentColor"
+              >
+                <path
+                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="info-body">
+            <div id="infoMessage"></div>
+            <label id="infoDontShowAgain" class="info-dont-show hidden">
+              <input
+                type="checkbox"
+                id="infoDontShowCheckbox"
+                class="info-dont-show-checkbox"
+              />
+              <span id="infoDontShowLabel">Don't show again</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Guide Modal -->
+      <div id="guideOverlay" class="modal-overlay hidden">
+        <div class="modal-content guide-modal">
+          <div class="guide-header">
+            <h2 data-i18n="guide-title">User guide</h2>
+          </div>
+          <div class="guide-body">
+            <div class="guide-item">
+              <div class="guide-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M19 2h-4.18C14.4.84 13.3 0 12 0c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 18H5V4h2v3h10V4h2v16z"
+                  />
+                </svg>
+              </div>
+              <div class="guide-text" data-i18n="guide-step-1">
+                Copy any media link from TikTok, Instagram, YouTube, Twitter/X,
+                Douyin & 14+ platforms.
+              </div>
+            </div>
+            <div class="guide-item">
+              <div class="guide-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                >
+                  <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                </svg>
+              </div>
+              <div class="guide-text" data-i18n="guide-step-2">
+                Tap "Paste" or use Auto-Paste to analyze the link and select
+                your preferred quality.
+              </div>
+            </div>
+            <div class="guide-item">
+              <div class="guide-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"
+                  />
+                </svg>
+              </div>
+              <div class="guide-text" data-i18n="guide-step-3">
+                Tap "Download" to save files directly to device storage with
+                live progress tracking.
+              </div>
+            </div>
+            <div class="guide-item">
+              <div class="guide-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"
+                  />
+                </svg>
+              </div>
+              <div class="guide-text" data-i18n="guide-step-4">
+                Access saved media in History for offline playback or secure
+                with Biometric Lock.
+              </div>
+            </div>
+          </div>
+          <div class="guide-footer">
+            <label class="guide-checkbox">
+              <input type="checkbox" id="hideGuideCheckbox" />
+              <span class="checkmark"></span>
+              <span data-i18n="label-dont-show">Don't show up again</span>
+            </label>
+            <div class="guide-actions">
+              <button
+                id="closeGuideBtn"
+                class="secondary-btn"
+                data-i18n="btn-close"
+              >
+                Close
+              </button>
+              <button
+                id="guideToSettingsBtn"
+                class="primary-btn"
+                data-i18n="btn-open-settings"
+              >
+                Open settings
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom Confirm Modal -->
+      <div id="confirmOverlay" class="modal-overlay hidden">
+        <div class="modal-content confirm-modal">
+          <div class="confirm-body">
+            <h2 id="confirmTitle">Confirm Action</h2>
+            <p id="confirmMessage">Are you sure you want to proceed?</p>
+          </div>
+          <div class="confirm-actions">
+            <button id="cancelConfirmBtn" class="cancel-btn">CANCEL</button>
+            <button id="okConfirmBtn" class="ok-btn">CONFIRM</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-quote" data-i18n="quote-simplicity">
+        "Simplicity is the ultimate sophistication."
+      </div>
+    </div>
+    <script type="module" src="js/script.js"></script>
+  </body>
+</html>
