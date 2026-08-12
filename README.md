@@ -197,7 +197,20 @@ Please read the license before using, modifying, or redistributing the source co
   <br><br>
   <strong>ZENITH v4.2.1</strong>
   <br>
-  Minimalist Media Downloader for Android
+  Minimalist Media Downloader for Android and Ios
   <br><br>
   <strong>Minimalist. Fast. Clean. No Ads.</strong>
+</p>
+<br>
+
+<p align="center">
+  <a href="https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.1">
+    <img src="https://img.shields.io/badge/⬇%20DOWNLOAD%20ZENITH%20v4.2.1-blue?style=for-the-badge" alt="Download ZENITH v4.2.1">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.1">
+    <strong>Download APK</strong>
+  </a>
 </p>
