@@ -1,7 +1,7 @@
 <p align="center">
   <img src="assets/zenith-logo.png" width="140" alt="ZENITH Logo">
 </p><h1 align="center">ZENITH</h1><p align="center">
-  <strong>Minimalist Media Downloader for Android</strong>
+  <strong>Minimalist Media Downloader for Android and Ios</strong>
 </p><p align="center">
   Simple. Fast. Clean. No Ads.
 </p><p align="center">
