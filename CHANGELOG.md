@@ -2,7 +2,7 @@
 
 All notable changes to ZENITH are documented in this file.
 
-## [4.2.1] - 2026-07-XX
+## [4.2.2] - 2026-07-XX
 
 ### Added
 - Initial ZENITH release documentation.
@@ -19,7 +19,7 @@ All notable changes to ZENITH are documented in this file.
 ### Fixed
 - Minor stability and documentation issues.
 
-## [4.2.0] - Previous Release
+## [4.2.1] - Previous Release
 
 ### Added
 - Initial ZENITH project features.
@@ -32,4 +32,4 @@ ZENITH follows Semantic Versioning:
 
 `MAJOR.MINOR.PATCH`
 
-Example: `4.2.1`
+Example: `4.2.2`
