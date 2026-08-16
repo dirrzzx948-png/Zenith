@@ -7,7 +7,7 @@
 </p><p align="center">
   A lightweight Android media downloader built to keep downloading simple.
 </p><p align="center">
-  <img src="https://img.shields.io/badge/version-4.2.1-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/version-4.2.2-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/platform-Android-green?style=for-the-badge" alt="Platform">
   <img src="https://img.shields.io/badge/ads-none-success?style=for-the-badge" alt="No Ads">
   <img src="https://img.shields.io/badge/license-see%20LICENSE-lightgrey?style=for-the-badge" alt="License">
