@@ -195,7 +195,7 @@ Please read the license before using, modifying, or redistributing the source co
 <p align="center">
   <img src="assets/zenith-logo.png" width="80" alt="ZENITH">
   <br><br>
-  <strong>ZENITH v4.2.1</strong>
+  <strong>ZENITH v4.2.2</strong>
   <br>
   Minimalist Media Downloader for Android and Ios
   <br><br>
@@ -204,13 +204,13 @@ Please read the license before using, modifying, or redistributing the source co
 <br>
 
 <p align="center">
-  <a href="https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.1">
-    <img src="https://img.shields.io/badge/⬇%20DOWNLOAD%20ZENITH%20v4.2.1-blue?style=for-the-badge" alt="Download ZENITH v4.2.1">
+  <a href="https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.2">
+    <img src="https://img.shields.io/badge/⬇%20DOWNLOAD%20ZENITH%20v4.2.2-blue?style=for-the-badge" alt="Download ZENITH v4.2.1">
   </a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.1">
+  <a href="https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.2">
     <strong>Download APK</strong>
   </a>
 </p>
