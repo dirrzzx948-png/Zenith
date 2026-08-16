@@ -55,7 +55,7 @@ import {
   checkAllScrapersHealth,
 } from "./utils/scraperHealth.js";
 
-const APP_VERSION = "4.2.1";
+const APP_VERSION = "4.2.2";
 const GITHUB_REPO = "dirrzzx948-png/Zenith";
 const UPDATE_CHECK_URL = `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`;
 const REPO_URL = `https://github.com/${GITHUB_REPO}`;
