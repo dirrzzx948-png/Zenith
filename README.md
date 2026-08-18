@@ -211,6 +211,6 @@ Please read the license before using, modifying, or redistributing the source co
 
 <p align="center">
   <a href="https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.2">
-    <strong>Download APK</strong>
+    <strong>Download APPK</strong>
   </a>
 </p>
