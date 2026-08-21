@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/zenith-logo.png" width="140" alt="ZENITH Logo">
+  <img src="asset/zenith-logo.png" width="140" alt="ZENITH Logo">
 </p><h1 align="center">ZENITH</h1><p align="center">
   <strong>Minimalist Media Downloader for Android and Ios</strong>
 </p><p align="center">
@@ -193,7 +193,7 @@ Please read the license before using, modifying, or redistributing the source co
 ---
 
 <p align="center">
-  <img src="assets/zenith-logo.png" width="80" alt="ZENITH">
+  <img src="asset/zenith-logo.png" width="80" alt="ZENITH">
   <br><br>
   <strong>ZENITH v4.2.2</strong>
   <br>
