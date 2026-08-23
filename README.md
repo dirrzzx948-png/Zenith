@@ -12,6 +12,8 @@
   <img src="https://img.shields.io/github/stars/dirrzzx948-png/Zenith?style=flat-square&color=gold" alt="Stars">
   <img src="https://img.shields.io/github/repo-size/dirrzzx948-png/Zenith?style=flat-square&color=purple" alt="Repo Size">
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License">
+<img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Platform">
+
 
   About
 
