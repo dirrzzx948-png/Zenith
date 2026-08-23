@@ -1,6 +1,6 @@
 {
 	"appId": "com.mori.downloader",
-	"appName": "Mori",
+	"appName": "Zenith",
 	"webDir": "public",
 	"plugins": {
 		"CapacitorHttp": {
