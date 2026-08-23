@@ -13,7 +13,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
       - uses: actions/setup-java@v4
         with:
@@ -22,11 +21,14 @@ jobs:
 
       - uses: android-actions/setup-android@v3
 
-      - run: npm ci
+      - name: Install dependencies
+        run: npm install
 
-      - run: npm run build
+      - name: Build web
+        run: npm run build
 
-      - run: npx cap sync android
+      - name: Sync Capacitor
+        run: npx cap sync android
 
       - name: Build APK
         working-directory: android
@@ -34,7 +36,8 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
           name: Zenith-APK
           path: android/app/build/outputs/apk/debug/*.apk
