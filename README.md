@@ -131,17 +131,27 @@ The application remains focused on its primary functionality instead of filling 
 
 ---
 
-Security
+## Security & Safety Notice
 
-Official ZENITH releases are built through an automated workflow. The build process can use GitHub Actions to compile the application and produce release APKs based on the project's source code and build configuration.
+Mori is **100% open-source, ad-free, and contains zero malware, spyware, or trackers**. All network requests and file downloads run locally on your device without external analytics servers.
 
-For the safest experience, always download ZENITH from the official project repository or official release page.
+> [!TIP]
+> **Doubtful or concerned about false-positive security warnings?**  
+> Because Mori release binaries (`.apk` and `.ipa`) are open-source builds compiled without expensive commercial enterprise signing certificates, some OS security software or browsers may display standard false-positive warnings.
+>
+> If you have any doubts, you can upload and scan any release file directly on **[VirusTotal](https://www.virustotal.com/)** before installing!
 
-Avoid APK files from unknown websites, modified APK repositories, or unofficial mirrors.
+> [!NOTE]
+> **Android Play Protect Warning:**  
+> When installing the `.apk` manually (sideloading outside Google Play Store), Play Protect may display a security prompt.
+>
+> Tap **"More Details"** → **"Install Anyway"** if you trust the source of the APK.
 
-ZENITH is not designed to contain viruses, malware, spyware, adware, or unwanted bundled applications. However, users should always verify that the APK they install comes from an official source.
-
----
+> [!NOTE]
+> **iOS IPA Installation Warning:**  
+> When installing the `.ipa` manually outside the App Store, iOS may require the application to be signed with a valid Apple certificate or installed through a supported sideloading method.
+>
+> If iOS displays a warning or refuses to open the application, verify that the IPA was obtained from a trusted source and that it has been properly signed before installation.
 
 Installation
 
