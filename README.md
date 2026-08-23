@@ -218,12 +218,25 @@ Please read the license before using, modifying, or redistributing the source co
 
 <p align="center">
   <a href="https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.2">
-    <img src="https://img.shields.io/badge/⬇%20DOWNLOAD%20ZENITH%20v4.2.2-blue?style=for-the-badge" alt="Download ZENITH v4.2.1">
+    <img src="https://img.shields.io/badge/⬇%20DOWNLOAD%20ZENITH%20v4.2.2-blue?style=for-the-badge" alt="Download ZENITH v4.2.2">
   </a>
 </p>
 
 <p align="center">
   <a href="https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.2">
     <strong>Download APK</strong>
+
+## Official Download
+
+Download the latest official APK from the
+[Releases](https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.2) page.
+
+> Avoid downloading modified or repackaged versions from unofficial sources.
+  
+## Technology
+
+ZENITH is built with web technologies and
+[Capacitor](https://capacitorjs.com/) for Android.
+
   </a>
 </p>
