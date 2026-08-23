@@ -7,13 +7,13 @@
 </p><p align="center">
   A lightweight Android media downloader built to keep downloading simple.
 </p><p align="center">
-  <img src="https://img.shields.io/badge/version-4.2.2-blue?style=for-the-badge" alt="Version">
-  <img src="https://img.shields.io/badge/platform-Android-green?style=for-the-badge" alt="Platform">
-  <img src="https://img.shields.io/badge/ads-none-success?style=for-the-badge" alt="No Ads">
-  <img src="https://img.shields.io/badge/license-see%20LICENSE-lightgrey?style=for-the-badge" alt="License">
-</p>---
+  <img src="https://img.shields.io/badge/Version-v4.2.2-brown?style=flat-square" alt="Version">
+  <img src="https://img.shields.io/github/downloads/coflyn/mori/total?style=flat-square&color=blue" alt="Downloads">
+  <img src="https://img.shields.io/github/stars/dirrzzx948-png/Zenith?style=flat-square&color=gold" alt="Stars">
+  <img src="https://img.shields.io/github/repo-size/dirrzzx948-png/Zenith?style=flat-square&color=purple" alt="Repo Size">
+  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License">
 
-About
+  About
 
 ZENITH is a minimalist media downloader for Android designed for users who want a simple and clean way to process media links from multiple popular platforms.
 
@@ -88,15 +88,16 @@ Official APK releases can be generated through automated GitHub Actions workflow
 
 ## Supported Platforms
 
-| Platform                                                                                                                                                              | Features               | Platform                                                                            | Features                             |
-| :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------- | :---------------------------------------------------------------------------------- | :----------------------------------- |
-| <img src="https://cdn.simpleicons.org/tiktok/000000" width="16" /> **TikTok**                                                                                         | Video (No WM) / Photos | <img src="https://cdn.simpleicons.org/instagram/E4405F" width="16" /> **Instagram** | Reels / Stories / Photos             |
-| <img src="https://cdn.simpleicons.org/youtube/FF0000" width="16" /> **YouTube**                                                                                       | MP4 Video / MP3 Audio  | <img src="https://cdn.simpleicons.org/x/000000" width="16" /> **Twitter (X)**       | HD Video / GIFs                      |
-| <img src="https://cdn.simpleicons.org/spotify/1DB954" width="16" /> **Spotify**                                                                                       | MP3 Audio              | <img src="https://cdn.simpleicons.org/pinterest/E60023" width="16" /> **Pinterest** | PinDown & PinDirect (Video / Images) |
-| <img src="https://cdn.simpleicons.org/applemusic/FA243C" width="16" /> **Apple Music**                                                                                | MP3 Audio              | <img src="https://cdn.simpleicons.org/facebook/1877F2" width="16" /> **Facebook**   | Reels / HD Video                     |
-| <img src="https://cdn.simpleicons.org/xiaohongshu/FF2442" width="16" /> **RedNote**                                                                                   | Photos / Videos        | <img src="https://cdn.simpleicons.org/threads/000000" width="16" /> **Threads**     | Video / Photos                       |
-| <img src="https://cdn.simpleicons.org/bilibili/00A1D6" width="16" /> **Bilibili**                                                                                     | Video / Audio (DASH)   | <img src="https://cdn.simpleicons.org/pixiv/0096FA" width="16" /> **Pixiv**         | Gallery / Ugoira to MP4              |
-| <img src="https://cdn.simpleicons.org/douyin/000000" width="16" style="display:none;" /><img src="https://cdn.simpleicons.org/tiktok/000000" width="16" /> **Douyin** | Video (No WM) / Photos | <img src="https://cdn.simpleicons.org/bandcamp/1DA1F2" width="16" /> **Bandcamp**   | Album / MP3 Track                    |
+| Platform                                                                               | Features               | Platform                                                                            | Features                 |
+| :------------------------------------------------------------------------------------- | :--------------------- | :---------------------------------------------------------------------------------- | :----------------------- |
+| <img src="https://cdn.simpleicons.org/tiktok/000000" width="16" /> **TikTok**          | Video (No WM) / Photos | <img src="https://cdn.simpleicons.org/instagram/E4405F" width="16" /> **Instagram** | Reels / Stories / Photos |
+| <img src="https://cdn.simpleicons.org/youtube/FF0000" width="16" /> **YouTube**        | MP4 Video / MP3 Audio  | <img src="https://cdn.simpleicons.org/x/000000" width="16" /> **Twitter (X)**       | HD Video / GIFs          |
+| <img src="https://cdn.simpleicons.org/spotify/1DB954" width="16" /> **Spotify**        | Playlist / Album / MP3 | <img src="https://cdn.simpleicons.org/pinterest/E60023" width="16" /> **Pinterest** | PinDown (Video / Images) |
+| <img src="https://cdn.simpleicons.org/applemusic/FA243C" width="16" /> **Apple Music** | Playlist / Album / MP3 | <img src="https://cdn.simpleicons.org/facebook/1877F2" width="16" /> **Facebook**   | Reels / HD Video         |
+| <img src="https://cdn.simpleicons.org/xiaohongshu/FF2442" width="16" /> **RedNote**    | Photos / Videos        | <img src="https://cdn.simpleicons.org/threads/000000" width="16" /> **Threads**     | Video / Photos           |
+| <img src="https://cdn.simpleicons.org/bilibili/00A1D6" width="16" /> **Bilibili**      | Video / Audio (DASH)   | <img src="https://cdn.simpleicons.org/pixiv/0096FA" width="16" /> **Pixiv**         | Gallery / Ugoira to MP4  |
+| <img src="https://cdn.simpleicons.org/tiktok/000000" width="16" /> **Douyin**          | Video (No WM) / Photos | <img src="https://cdn.simpleicons.org/bandcamp/1DA1F2" width="16" /> **Bandcamp**   | Album / MP3 Track        |
+           Support me: https://sociabuzz.com/dirrzzx
 
 «Platform support depends on the current implementation and may change when third-party services modify their systems, APIs, URLs, authentication, or content delivery mechanisms.»
 
