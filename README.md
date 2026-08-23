@@ -133,11 +133,11 @@ The application remains focused on its primary functionality instead of filling 
 
 ## Security & Safety Notice
 
-Mori is **100% open-source, ad-free, and contains zero malware, spyware, or trackers**. All network requests and file downloads run locally on your device without external analytics servers.
+Zenith is **100% open-source, ad-free, and contains zero malware, spyware, or trackers**. All network requests and file downloads run locally on your device without external analytics servers.
 
 > [!TIP]
 > **Doubtful or concerned about false-positive security warnings?**  
-> Because Mori release binaries (`.apk` and `.ipa`) are open-source builds compiled without expensive commercial enterprise signing certificates, some OS security software or browsers may display standard false-positive warnings.
+> Because Zenith release binaries (`.apk` and `.ipa`) are open-source builds compiled without expensive commercial enterprise signing certificates, some OS security software or browsers may display standard false-positive warnings.
 >
 > If you have any doubts, you can upload and scan any release file directly on **[VirusTotal](https://www.virustotal.com/)** before installing!
 
