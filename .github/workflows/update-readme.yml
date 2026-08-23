@@ -1,0 +1,76 @@
+name: Auto Update README
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get latest release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG=$(gh release view --json tagName --jq '.tagName')
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Update README
+        env:
+          VERSION: ${{ steps.release.outputs.tag }}
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import os
+          import re
+
+          path = Path("README.md")
+          text = path.read_text(encoding="utf-8")
+          version = os.environ["VERSION"]
+
+          # Remove a leading "v" only for the displayed version.
+          display_version = version.removeprefix("v")
+
+          # Update only the version line marked for automation.
+          pattern = r"(<!-- AUTO-UPDATE-VERSION-START -->\s*\n)ZENITH v[^\n]+(\n<!-- AUTO-UPDATE-VERSION-END -->)"
+          replacement = (
+              r"\1"
+              f"ZENITH v{display_version}"
+              r"\2"
+          )
+
+          new_text, count = re.subn(pattern, replacement, text, count=1)
+
+          if count == 0:
+              raise SystemExit(
+                  "README.md tidak memiliki marker "
+                  "<!-- AUTO-UPDATE-VERSION-START --> / END."
+              )
+
+          path.write_text(new_text, encoding="utf-8")
+          PY
+
+      - name: Commit README changes
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "README.md sudah up to date."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add README.md
+          git commit -m "docs: update README version to ${{ steps.release.outputs.tag }}"
+          git push
