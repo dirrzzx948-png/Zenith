@@ -169,6 +169,12 @@ Open the APK on your Android device and follow the Android installation instruct
 
 If Android asks for permission to install applications from that source, review the source carefully before continuing.
 
+## Screenshot
+
+<p align="center">
+  <img src="./asset/virus-total.jpg" width="280" alt="VirusTotal">
+</p>
+
 «Never install modified APKs from unknown sources.»
 
 ---
