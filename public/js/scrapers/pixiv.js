@@ -134,19 +134,23 @@ export async function scrapePixiv(url) {
         }
       } catch (e) {}
 
+      const ugoiraThumb = `https://pixiv.re/${illustId}.gif`;
       downloads.push({
         type: "UGOIRA (MP4)",
         url: `https://ugoira.com/api/mp4/${illustId}`,
+        thumbnail: ugoiraThumb,
       });
       downloads.push({
         type: "UGOIRA (GIF)",
-        url: `https://pixiv.re/${illustId}.gif`,
+        url: ugoiraThumb,
+        thumbnail: ugoiraThumb,
       });
       downloads.push({
         type: "UGOIRA (ZIP)",
         url:
           zipUrl ||
           `https://i.pximg.net/img-zip-ugoira/img/${illustId}_ugoira1920x1080.zip`,
+        thumbnail: ugoiraThumb,
       });
     } else {
       const pageCount = illustData?.pageCount || 1;
@@ -156,17 +160,20 @@ export async function scrapePixiv(url) {
           let type = pageCount > 1 ? `PAGE ${i + 1}` : "IMAGE";
           let pageUrl = originalUrl.replace("_p0", `_p${i}`);
           pageUrl = pageUrl.replace("i.pximg.net", "i.pixiv.re");
-          downloads.push({ type, url: pageUrl });
+          let pageThumb = pageUrl;
+          downloads.push({ type, url: pageUrl, thumbnail: pageThumb });
         }
       } else {
         downloads.push({
           type: "IMAGE / PAGE 1",
           url: `https://pixiv.re/${illustId}.jpg`,
+          thumbnail: `https://pixiv.re/${illustId}.jpg`,
         });
         for (let i = 2; i <= pageCount; i++) {
           downloads.push({
             type: `PAGE ${i}`,
             url: `https://pixiv.re/${illustId}-${i}.jpg`,
+            thumbnail: `https://pixiv.re/${illustId}-${i}.jpg`,
           });
         }
       }

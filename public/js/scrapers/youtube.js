@@ -65,15 +65,16 @@ export async function scrapeYouTube(url) {
             "ytmp3.gg Convert",
           );
           currentStatus = convRes.status;
-          const conv =
-            typeof convRes.data === "string"
-              ? JSON.parse(convRes.data)
-              : convRes.data;
-          if (conv.error || !conv.statusUrl) return null;
+          let conv = convRes.data;
+          if (typeof conv === "string") {
+            if (conv.trim().startsWith("<")) return null;
+            conv = JSON.parse(conv);
+          }
+          if (!conv || conv.error || !conv.statusUrl) return null;
           let downloadUrl = null,
             attempts = 0;
           while (!downloadUrl && attempts < 30) {
-            await new Promise((r) => setTimeout(r, 2000));
+            await new Promise((r) => setTimeout(r, 1500));
             const pollData = await scraperFetch(
               {
                 url: conv.statusUrl,
@@ -82,11 +83,11 @@ export async function scrapeYouTube(url) {
               "ytmp3.gg Status",
             );
             attempts++;
-            if (pollData.status === "completed" && pollData.downloadUrl) {
+            if (pollData && pollData.status === "completed" && pollData.downloadUrl) {
               downloadUrl = pollData.downloadUrl;
               break;
             }
-            if (pollData.status === "error" || pollData.status === "failed")
+            if (pollData && (pollData.status === "error" || pollData.status === "failed"))
               break;
           }
           return downloadUrl
@@ -96,20 +97,32 @@ export async function scrapeYouTube(url) {
           return null;
         }
       };
-      const tiers = ["1080p", "720p", "480p", "360p"];
-      const [mp3, ...mp4s] = await Promise.all([
-        runConvert("mp3", ""),
-        ...tiers.map((q) => runConvert("mp4", q)),
-      ]);
+
       const downloads = [];
-      mp4s.forEach((r, i) => {
-        if (r) downloads.push({ type: `MP4 ${tiers[i]}`, url: r.url });
-      });
-      if (mp3) downloads.push({ type: "MP3", url: mp3.url });
-      if (!downloads.length)
-        throw new Error("Failed to get download links. Try again.");
-      _ytSource = null;
-      return createScraperResult(true, { ...meta, downloads, sourceUrl: url });
+      const tiers = ["720p", "360p"];
+
+      // Run sequential requests to avoid convert1s concurrency limits
+      for (const q of tiers) {
+        const r = await runConvert("mp4", q);
+        if (r && r.url) {
+          downloads.push({ type: `MP4 ${r.quality || q}`, url: r.url });
+        }
+        await new Promise((res) => setTimeout(res, 300));
+      }
+
+      const mp3 = await runConvert("mp3", "");
+      if (mp3 && mp3.url) {
+        downloads.push({ type: "MP3", url: mp3.url });
+      }
+
+      if (downloads.length > 0) {
+        _ytSource = null;
+        return createScraperResult(true, { ...meta, downloads, sourceUrl: url });
+      }
+
+      console.warn("[ytmp3.gg] Failed, falling back to ytmp3.mobi...");
+      _ytSource = "mobi";
+      return await scrapeYouTube(url);
     }
 
     if (_ytSource === "mobi") {

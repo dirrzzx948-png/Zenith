@@ -61,59 +61,106 @@ export async function scrapeAppleMusic(url) {
     const parser = new DOMParser();
     let finalHtml = r3Data.html;
     const doc2 = parser.parseFromString(finalHtml, "text/html");
-    const form2 = doc2.querySelector('form[name="submitapurl"]');
+    const forms2 = doc2.querySelectorAll('form[name="submitapurl"]');
 
-    if (form2) {
+    const downloads = [];
+    const isMultiTrack = forms2.length > 1;
+
+    for (let i = 0; i < forms2.length; i++) {
+      const form2 = forms2[i];
       const data2 = {};
       form2.querySelectorAll("input").forEach((input) => {
         const name = input.getAttribute("name");
         const value = input.getAttribute("value") || "";
         if (name) data2[name] = value;
       });
+      const payloadStr = serializeData(data2);
 
-      const r4Data = await scraperFetch(
-        {
-          url: "https://aplmate.com/action/track",
-          method: "POST",
-          data: serializeData(data2),
-          headers: {
-            ...headers,
-            "Content-Type": "application/x-www-form-urlencoded",
-            Cookie: cookies,
-          },
-        },
-        "Aplmate Track",
-      );
-      finalHtml = r4Data.data || r4Data;
-    }
+      const prefix = isMultiTrack ? `${(i + 1).toString().padStart(2, "0")}. ` : "";
 
-    const doc3 = parser.parseFromString(finalHtml, "text/html");
-    const title =
-      doc3.querySelector(".hover-underline")?.textContent?.trim() ||
-      doc3.querySelector("h3")?.textContent?.trim() ||
-      "Apple Music Content";
-    const artist = doc3.querySelector("p")?.textContent?.trim();
-    const thumbnail = doc3.querySelector("img")?.getAttribute("src");
-    const downloads = [];
+      let itemTitle = "";
+      const fb = form2.querySelector('input[name="data"]')?.value;
+      if (fb) {
+        try {
+          const dec = JSON.parse(atob(fb));
+          const name = dec.name || dec.title || "";
+          const artist = dec.artist || dec.singer || "";
+          if (artist && name) itemTitle = `${artist} - ${name}`;
+          else if (name) itemTitle = name;
+        } catch (_) {}
+      }
 
-    doc3.querySelectorAll("a").forEach((a) => {
-      const href = a.getAttribute("href");
-      const text = a.textContent.trim();
-      if (
-        href &&
-        (href.includes("/dl?token=") || a.classList.contains("abutton"))
-      ) {
-        if (href.includes("ko-fi.com") || href.includes("premium.html")) return;
-        if (text.toLowerCase().includes("another song")) return;
+      if (i === 0 && !isMultiTrack) {
+        try {
+          const r4Data = await scraperFetch(
+            {
+              url: "https://aplmate.com/action/track",
+              method: "POST",
+              data: payloadStr,
+              headers: {
+                ...headers,
+                "Content-Type": "application/x-www-form-urlencoded",
+                Cookie: cookies,
+              },
+            },
+            "Aplmate Track",
+          );
+          const trackHtml = r4Data.data || r4Data;
+          const doc3 = parser.parseFromString(trackHtml, "text/html");
+
+          doc3.querySelectorAll("a").forEach((a) => {
+            const href = a.getAttribute("href");
+            const text = a.textContent.trim();
+            if (
+              href &&
+              (href.includes("/dl?token=") || a.classList.contains("abutton"))
+            ) {
+              if (href.includes("ko-fi.com") || href.includes("premium.html")) return;
+              if (text.toLowerCase().includes("another song")) return;
+              downloads.push({
+                type: `${prefix}${text || "MP3"} [MP3]`,
+                url: href.startsWith("http") ? href : "https://aplmate.com" + href,
+              });
+            }
+          });
+        } catch (e) {}
+      }
+
+      if (downloads.length === 0 || isMultiTrack) {
         downloads.push({
-          type: text || "MP3",
-          url: href.startsWith("http") ? href : "https://aplmate.com" + href,
+          type: `${prefix}${itemTitle || "Track " + (i + 1)} [MP3]`,
+          url: `applemusic_resolve:${payloadStr}`,
         });
       }
-    });
+    }
+
+    if (downloads.length === 0) throw new Error("Download links not found.");
+
+    const firstMeta = (() => {
+      const fb = forms2[0]?.querySelector('input[name="data"]')?.value;
+      if (!fb) return null;
+      try {
+        return JSON.parse(atob(fb));
+      } catch {
+        return null;
+      }
+    })();
+    const title =
+      doc2.querySelector(".hover-underline")?.textContent?.trim() ||
+      doc2.querySelector("h3")?.textContent?.trim() ||
+      firstMeta?.name ||
+      "Apple Music Content";
+    const artist = doc2.querySelector("p")?.textContent?.trim();
+    const thumbnail = doc2.querySelector("img")?.getAttribute("src");
+    const typeSuffix =
+      forms2.length > 1
+        ? url.includes("/playlist/")
+          ? " (Playlist)"
+          : " (Album)"
+        : "";
 
     return createScraperResult(true, {
-      title: artist ? `${artist} - ${title}` : title,
+      title: artist ? `${artist} - ${title}${typeSuffix}` : `${title}${typeSuffix}`,
       thumbnail,
       downloads,
       sourceUrl: url,

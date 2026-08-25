@@ -106,7 +106,15 @@ export async function scrapeBilibili(url) {
             if (epData && epData.data && epData.data.sections) {
               for (const sec of epData.data.sections) {
                 if (sec.episodes && sec.episodes.length > 0) {
-                  apiInfo.id = sec.episodes[0].ep_id;
+                  const firstEp = sec.episodes[0];
+                  apiInfo.id =
+                    firstEp.episode_id || firstEp.ep_id || firstEp.id;
+                  if (firstEp.title_display && title === "Bilibili.tv Video") {
+                    title = firstEp.title_display;
+                  }
+                  if (firstEp.cover && !thumbnail) {
+                    thumbnail = firstEp.cover;
+                  }
                   break;
                 }
               }
@@ -115,34 +123,49 @@ export async function scrapeBilibili(url) {
             console.error("Failed to resolve season episodes:", e);
           }
           if (!apiInfo.id && html) {
-            const epMatch = html.match(/"ep_id"\s*:\s*(\d+)/);
+            const epMatch =
+              html.match(/"episode_id"\s*:\s*"(\d+)"/) ||
+              html.match(/"episode_id"\s*:\s*(\d+)/) ||
+              html.match(/"ep_id"\s*:\s*(\d+)/);
             if (epMatch) apiInfo.id = epMatch[1];
           }
         }
 
         const downloads = [];
 
-        if (apiInfo.tipo === "anime" && apiInfo.id) {
+        if (apiInfo.tipo === "anime" && (apiInfo.id || apiInfo.seasonId)) {
           try {
+            const param = apiInfo.id
+              ? `ep_id=${apiInfo.id}`
+              : `season_id=${apiInfo.seasonId}`;
             const v2Data = await scraperFetch(
               {
-                url: `https://api.bilibili.tv/intl/gateway/v2/ogv/playurl?ep_id=${apiInfo.id}&platform=web&s_locale=en_US`,
+                url: `https://api.bilibili.tv/intl/gateway/v2/ogv/playurl?${param}&platform=web&s_locale=en_US`,
               },
               "Bilibili OGV v2",
             );
             if (v2Data && v2Data.data && v2Data.data.video_info) {
               const streamList = v2Data.data.video_info.stream_list || [];
               streamList.forEach((s) => {
-                const playUrl = s.url || s.url_list?.[0]?.url;
+                const playUrl =
+                  s.url ||
+                  s.url_list?.[0]?.url ||
+                  s.dash_video?.base_url ||
+                  s.dash_video?.backup_url?.[0];
                 if (playUrl) {
                   let secureUrl = playUrl;
                   if (secureUrl.startsWith("http://")) {
                     secureUrl = secureUrl.replace("http://", "https://");
                   }
+                  const quality =
+                    s.stream_info?.display_desc ||
+                    s.stream_info?.description ||
+                    s.desc_words ||
+                    (s.quality ? `${s.quality}p` : "HD");
                   downloads.push({
                     url: secureUrl,
                     type: "VIDEO",
-                    quality: s.desc_words || `${s.quality}p`,
+                    quality,
                     headers: {
                       Referer: "https://www.bilibili.tv/",
                     },

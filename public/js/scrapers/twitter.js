@@ -17,14 +17,39 @@ export async function scrapeTwitter(url) {
     const cleanUrl = getCleanUrl(url).split("?")[0];
     if (!_twSource) return { requireSource: true };
 
-    const formatResolutionLabel = (rawText, qualityText) => {
+    const formatResolutionLabel = (rawText, qualityText, url = "") => {
       const text = (rawText || "") + " " + (qualityText || "");
+      const urlMatch = (url || "").match(/\/vid\/(\d+x\d+)\//i);
+      if (urlMatch) {
+        return urlMatch[1].toLowerCase();
+      }
       const match = text.match(/(\d+\s*[xX]\s*\d+|\d+\s*p)/i);
       if (match) {
         return match[1].replace(/\s+/g, "").toLowerCase();
       }
-      const clean = text.replace(/download|video|mp4|\:/gi, "").trim();
+      const clean = text
+        .replace(/download|video|mp4|get|premium|for|\$|\d+\.\d+|\:/gi, "")
+        .trim();
       return clean || "MP4";
+    };
+
+    const isPaywallOrInvalid = (href, labelText) => {
+      if (!href || !href.startsWith("http")) return true;
+      const lowerHref = href.toLowerCase();
+      const lowerLabel = (labelText || "").toLowerCase();
+      if (
+        lowerHref.includes("checkout") ||
+        lowerHref.includes("stripe") ||
+        lowerHref.includes("buy") ||
+        lowerHref.includes("premium") ||
+        lowerLabel.includes("$") ||
+        lowerLabel.includes("for $") ||
+        lowerLabel.includes("premium") ||
+        lowerLabel.includes("paywall")
+      ) {
+        return true;
+      }
+      return false;
     };
 
     if (_twSource === "tvd") {
@@ -76,7 +101,7 @@ export async function scrapeTwitter(url) {
       currentStatus = r2.status;
 
       const doc2 = parser.parseFromString(r2.data, "text/html");
-      const downloads = [];
+      const rawDownloads = [];
 
       doc2.querySelectorAll(".card-body").forEach((card) => {
         const qualityText =
@@ -84,51 +109,38 @@ export async function scrapeTwitter(url) {
         card.querySelectorAll("a.btn-download, a.btn").forEach((btn) => {
           const href = btn.getAttribute("href");
           const btnText = btn.textContent.trim();
-          if (href && href.startsWith("http")) {
-            const label = formatResolutionLabel(btnText, qualityText);
-            if (!downloads.some((d) => d.url === href)) {
+          const fullText = `${btnText} ${qualityText}`;
+          if (!isPaywallOrInvalid(href, fullText)) {
+            const label = formatResolutionLabel(btnText, qualityText, href);
+            if (!rawDownloads.some((d) => d.url === href)) {
               const isImg =
                 /\.(jpe?g|png|webp)(\?|$)/i.test(href) ||
                 label === "IMAGE" ||
                 label === "PHOTO";
-              const isMirror = isImg
-                ? false
-                : downloads.some(
-                    (d) => d.type !== "IMAGE" && d.type !== "PHOTO",
-                  );
-              downloads.push({ type: label, url: href, isMirror });
+              rawDownloads.push({ type: label, url: href, isMirror: false });
             }
           }
         });
       });
 
-      if (downloads.length === 0) {
+      if (rawDownloads.length === 0) {
         doc2
           .querySelectorAll('a[href*="video.twimg.com"], a[href*="twimg.com"]')
           .forEach((a) => {
             const href = a.getAttribute("href");
+            const text = a.textContent.trim();
             if (
-              href &&
-              href.startsWith("http") &&
-              !downloads.some((d) => d.url === href)
+              !isPaywallOrInvalid(href, text) &&
+              !rawDownloads.some((d) => d.url === href)
             ) {
-              const label = formatResolutionLabel(a.textContent.trim(), "");
-              const isImg =
-                /\.(jpe?g|png|webp)(\?|$)/i.test(href) ||
-                label === "IMAGE" ||
-                label === "PHOTO";
-              const isMirror = isImg
-                ? false
-                : downloads.some(
-                    (d) => d.type !== "IMAGE" && d.type !== "PHOTO",
-                  );
-              downloads.push({ type: label, url: href, isMirror });
+              const label = formatResolutionLabel(text, "", href);
+              rawDownloads.push({ type: label, url: href, isMirror: false });
             }
           });
       }
 
-      if (downloads.length === 0)
-        throw new Error("No video links found on TVD.");
+      if (rawDownloads.length === 0)
+        throw new Error("No free video links found on TVD.");
 
       const thumbnail =
         doc2
@@ -138,6 +150,9 @@ export async function scrapeTwitter(url) {
           ?.getAttribute("src") ||
         doc2.querySelector("video")?.getAttribute("poster") ||
         null;
+
+      // Strictly return only 1 valid free download link specifically for TVD
+      const downloads = rawDownloads.slice(0, 1);
 
       _twSource = null;
       return createScraperResult(true, {
@@ -193,15 +208,17 @@ export async function scrapeTwitter(url) {
             ?.getAttribute("href");
           if (dlUrl) {
             if (dlUrl.startsWith("/")) dlUrl = "https://tweeload.com" + dlUrl;
-            const label = formatResolutionLabel(quality, "");
-            const isImg =
-              /\.(jpe?g|png|webp)(\?|$)/i.test(dlUrl) ||
-              label === "IMAGE" ||
-              label === "PHOTO";
-            const isMirror = isImg
-              ? false
-              : downloads.some((d) => d.type !== "IMAGE" && d.type !== "PHOTO");
-            downloads.push({ type: label, url: dlUrl, isMirror });
+            if (!isPaywallOrInvalid(dlUrl, quality)) {
+              const label = formatResolutionLabel(quality, "", dlUrl);
+              const isImg =
+                /\.(jpe?g|png|webp)(\?|$)/i.test(dlUrl) ||
+                label === "IMAGE" ||
+                label === "PHOTO";
+              const isMirror = isImg
+                ? false
+                : downloads.some((d) => d.type !== "IMAGE" && d.type !== "PHOTO");
+              downloads.push({ type: label, url: dlUrl, isMirror });
+            }
           }
         });
 
@@ -215,8 +232,11 @@ export async function scrapeTwitter(url) {
               href.includes("tweeload"))
           ) {
             const text = a.textContent.trim();
-            if (text.toLowerCase() !== "download via the mobile app") {
-              const label = formatResolutionLabel(text, "");
+            if (
+              text.toLowerCase() !== "download via the mobile app" &&
+              !isPaywallOrInvalid(href, text)
+            ) {
+              const label = formatResolutionLabel(text, "", href);
               const isImg =
                 /\.(jpe?g|png|webp)(\?|$)/i.test(href) ||
                 label === "IMAGE" ||
