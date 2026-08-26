@@ -172,20 +172,11 @@ If Android asks for permission to install applications from that source, review 
 ## Screenshot
 
 <p align="center">
-  <img src="./asset/virus-total.jpg" width="280" alt="VirusTotal">
+  <img src="https://raw.githubusercontent.com/dirrzzx948-png/Zenith/main/asset/Screenshot01.jpg" width="30%">
+  <img src="https://raw.githubusercontent.com/dirrzzx948-png/Zenith/main/asset/Screenshot02.jpg" width="30%">
+  <img src="https://raw.githubusercontent.com/dirrzzx948-png/Zenith/main/asset/Screenshot03.jpg" width="30%">
 </p>
 
-<p align="center">
-  <img src="./asset/Screenshot01.jpg" width="280" alt="Screenshot">
-</p>
-
-<p align="center">
-  <img src="./asset/Screenshot02.jpg" width="280" alt="Screenshot">
-</p>
-
-<p align="center">
-  <img src="./asset/Screenshot03.jpg" width="280" alt="Screenshot">
-</p>
 ---
 
 Usage
