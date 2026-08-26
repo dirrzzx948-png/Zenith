@@ -235,7 +235,7 @@ Please read the license before using, modifying, or redistributing the source co
 </p>
 
 <p align="center">
-  <a href="https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.2">
+  <a href="https://github.com/dirrzzx948-png/Zenith/releases/download/v4.2.2/Zenith.v4.2.2.apk">
     <strong>Download APK</strong>
 
 ## Official Download
