@@ -220,7 +220,7 @@ Please read the license before using, modifying, or redistributing the source co
 <p align="center">
   <img src="asset/zenith-logo.png" width="80" alt="ZENITH">
   <br><br>
-  <strong>ZENITH v4.2.2</strong>
+  <strong>ZENITH v4.2.3</strong>
   <br>
   Minimalist Media Downloader for Android and Ios
   <br><br>
