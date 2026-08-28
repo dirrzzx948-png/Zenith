@@ -7,7 +7,7 @@
 </p><p align="center">
   A lightweight Android media downloader built to keep downloading simple.
 </p><p align="center">
-  <img src="https://img.shields.io/badge/Version-v4.2.2-brown?style=flat-square" alt="Version">
+  <img src="https://img.shields.io/badge/Version-v4.2.3-brown?style=flat-square" alt="Version">
   <img src="https://img.shields.io/github/downloads/coflyn/mori/total?style=flat-square&color=blue" alt="Downloads">
   <img src="https://img.shields.io/github/stars/dirrzzx948-png/Zenith?style=flat-square&color=gold&v=1" alt="Stars">
   <img src="https://img.shields.io/github/repo-size/dirrzzx948-png/Zenith?style=flat-square&color=purple" alt="Repo Size">
@@ -229,19 +229,19 @@ Please read the license before using, modifying, or redistributing the source co
 <br>
 
 <p align="center">
-  <a href="https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.2">
+  <a href="https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.3">
     <img src="https://img.shields.io/badge/⬇%20DOWNLOAD%20ZENITH%20v4.2.2-blue?style=for-the-badge" alt="Download ZENITH v4.2.2">
   </a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/dirrzzx948-png/Zenith/releases/download/v4.2.2/Zenith.v4.2.2.apk">
+  <a href="https://github.com/dirrzzx948-png/Zenith/releases/download/v4.2.3/Zenith.v4.2.3.apk">
     <strong>Download APK</strong>
 
 ## Official Download
 
 Download the latest official APK from the
-[Releases](https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.2) page.
+[Releases](https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.3) page.
 
 > Avoid downloading modified or repackaged versions from unofficial sources.
   
