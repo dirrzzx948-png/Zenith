@@ -9,7 +9,10 @@
 </p><p align="center">
   <img src="https://img.shields.io/badge/Version-v4.2.3-brown?style=flat-square" alt="Version">
   <img src="https://img.shields.io/github/downloads/coflyn/mori/total?style=flat-square&color=blue" alt="Downloads">
-  <img src="https://img.shields.io/github/stars/dirrzzx948-png/Zenith?style=flat-square&color=gold&v=1" alt="Stars">
+<img
+  src="https://img.shields.io/github/stars/dirrzzx948-png/Zenith?style=flat-square&color=gold&cacheSeconds=300"
+  alt="Stars"
+>
   <img src="https://img.shields.io/github/repo-size/dirrzzx948-png/Zenith?style=flat-square&color=purple" alt="Repo Size">
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License">
 <img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Platform">
