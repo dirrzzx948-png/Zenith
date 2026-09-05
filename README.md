@@ -284,7 +284,7 @@ Please read the license before using, modifying, or redistributing the source co
 
   <br><br>
 
-  <a href="https://github.com/dirrzz948-png/Zenith/releases/download/v4.3.1/Zenith.v4.3.1.apk">
+  <a href="https://github.com/dirrzzx948-png/Zenith/releases/download/v4.3.1/Zenith.v4.3.1.apk">
     <strong>Download APK</strong>
   </a>
 
@@ -297,7 +297,7 @@ Please read the license before using, modifying, or redistributing the source co
 ## Official Download
 
 Download the latest official APK from the
-[Releases](https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.3) page.
+[Releases](https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.3.1) page.
 
 > Avoid downloading modified or repackaged versions from unofficial sources.
   
