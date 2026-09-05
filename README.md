@@ -227,32 +227,43 @@ Please read the license before using, modifying, or redistributing the source co
   <br><br>
   <strong>Minimalist. Fast. Clean. No Ads.</strong>
 </p><br><table align="center">
-  <tr>
-    <!-- ZENITH BASIC -->
-    <td align="center" width="50%">  <img src="asset/zenith-logo.png" width="80" alt="ZENITH Basic">
+  <tr><!-- ZENITH BASIC -->
+<td align="center" width="50%">
+
+  <img src="asset/zenith-logo.png" width="80" alt="ZENITH Basic">
 
   <br><br>
 
-  <strong>ZENITH Basic</strong>
+  <h3>ZENITH Basic</h3>
 
-  <br><br>
+  <p>
+    Minimalist Media Downloader<br>
+    for Android
+  </p>
 
-  Minimalist Media Downloader<br>
-  for Android
+  <p>
+    Clean <strong>Liquid Glass UI</strong> with a modern,
+    lightweight design focused on simplicity and ease of use.
+  </p>
 
-  <br><br>
+  <p>
+    Essential features with smooth performance,
+    but fewer security features and animations than the Full Version.
+  </p>
 
-  <strong>Minimalist. Fast. Clean. No Ads.</strong>
+  <p>
+    <strong>Simple. Fast. Minimalist.</strong>
+  </p>
 
-  <br><br>
+  <br>
 
-  <a href="https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.3.1">
+  <a href="https://github.com/dirrzz948-png/Zenith/releases/tag/v4.3.1">
     <img src="https://img.shields.io/badge/%E2%AC%87%20DOWNLOAD%20ZENITH%20Basic-blue?style=for-the-badge" alt="Download ZENITH Basic">
   </a>
 
   <br><br>
 
-  <a href="https://github.com/dirrzzx948-png/Zenith/releases/download/v4.3.1/Zenith.Basic.apk">
+  <a href="https://github.com/dirrzz948-png/Zenith/releases/download/v4.3.1/Zenith.Basic.apk">
     <strong>Download APK</strong>
   </a>
 
@@ -265,18 +276,29 @@ Please read the license before using, modifying, or redistributing the source co
 
   <br><br>
 
-  <strong>ZENITH Full Version</strong>
+  <h3>ZENITH Full Version</h3>
 
-  <br><br>
+  <p>
+    Minimalist Media Downloader<br>
+    for Android
+  </p>
 
-  Minimalist Media Downloader<br>
-  for Android
+  <p>
+    A distinct <strong>Classic UI</strong> with enhanced
+    security, smooth animations, and improved performance.
+  </p>
 
-  <br><br>
+  <p>
+    Supports multiple languages including English,
+    Indonesian, Japanese, Korean, Mandarin, Arabic,
+    Russian, Tagalog, and Hindi.
+  </p>
 
-  <strong>Minimalist. Fast. Clean. No Ads.</strong>
+  <p>
+    <strong>Classic. Secure. Animated. Multilingual.</strong>
+  </p>
 
-  <br><br>
+  <br>
 
   <a href="https://github.com/dirrzz948-png/Zenith/releases/tag/v4.3.1">
     <img src="https://img.shields.io/badge/%E2%AC%87%20DOWNLOAD%20ZENITH%20Full%20Version-blue?style=for-the-badge" alt="Download ZENITH Full Version">
@@ -284,15 +306,16 @@ Please read the license before using, modifying, or redistributing the source co
 
   <br><br>
 
-  <a href="https://github.com/dirrzzx948-png/Zenith/releases/download/v4.3.1/Zenith.v4.3.1.apk">
+  <a href="https://github.com/dirrzz948-png/Zenith/releases/download/v4.3.1/Zenith.v4.3.1.apk">
     <strong>Download APK</strong>
   </a>
 
 </td>
 
   </tr>
-</table><br>
-
+</table><br><p align="center">
+  <strong>ZENITH</strong> — Simple. Fast. Clean.
+</p>
 
 ## Official Download
 
