@@ -7,7 +7,7 @@
 </p><p align="center">
   A lightweight Android media downloader built to keep downloading simple.
 </p><p align="center">
-  <img src="https://img.shields.io/badge/Version-v4.2.3-brown?style=flat-square" alt="Version">
+  <img src="https://img.shields.io/badge/Version-v4.3.1-brown?style=flat-square" alt="Version">
   <img src="https://img.shields.io/github/downloads/coflyn/mori/total?style=flat-square&color=blue" alt="Downloads">
 <img
   src="https://img.shields.io/github/stars/dirrzzx948-png/Zenith?style=flat-square&color=gold&cacheSeconds=300"
@@ -222,24 +222,77 @@ Please read the license before using, modifying, or redistributing the source co
 
 <p align="center">
   <img src="asset/zenith-logo.png" width="80" alt="ZENITH">
-  <br><br>
-  <strong>ZENITH v4.2.3</strong>
-  <br>
-  Minimalist Media Downloader for Android and Ios
+</p><h2 align="center">ZENITH</h2><p align="center">
+  Minimalist Media Downloader for Android and iOS
   <br><br>
   <strong>Minimalist. Fast. Clean. No Ads.</strong>
-</p>
-<br>
+</p><br><table align="center">
+  <tr>
+    <!-- ZENITH BASIC -->
+    <td align="center" width="50%">  <img src="asset/zenith-logo.png" width="80" alt="ZENITH Basic">
 
-<p align="center">
-  <a href="https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.2.3">
-    <img src="https://img.shields.io/badge/⬇%20DOWNLOAD%20ZENITH%20v4.2.3-blue?style=for-the-badge" alt="Download ZENITH v4.2.2">
+  <br><br>
+
+  <strong>ZENITH Basic</strong>
+
+  <br><br>
+
+  Minimalist Media Downloader<br>
+  for Android
+
+  <br><br>
+
+  <strong>Minimalist. Fast. Clean. No Ads.</strong>
+
+  <br><br>
+
+  <a href="https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.3.1">
+    <img src="https://img.shields.io/badge/%E2%AC%87%20DOWNLOAD%20ZENITH%20Basic-blue?style=for-the-badge" alt="Download ZENITH Basic">
   </a>
-</p>
 
-<p align="center">
-  <a href="https://github.com/dirrzzx948-png/Zenith/releases/download/v4.2.3/Zenith.v4.2.3.apk">
+  <br><br>
+
+  <a href="https://github.com/dirrzzx948-png/Zenith/releases/download/v4.3.1/Zenith.Basic.apk">
     <strong>Download APK</strong>
+  </a>
+
+</td>
+
+<!-- ZENITH FULL VERSION -->
+<td align="center" width="50%">
+
+  <img src="asset/zenith-logo.png" width="80" alt="ZENITH Full Version">
+
+  <br><br>
+
+  <strong>ZENITH Full Version</strong>
+
+  <br><br>
+
+  Minimalist Media Downloader<br>
+  for Android
+
+  <br><br>
+
+  <strong>Minimalist. Fast. Clean. No Ads.</strong>
+
+  <br><br>
+
+  <a href="https://github.com/dirrzz948-png/Zenith/releases/tag/v4.3.1">
+    <img src="https://img.shields.io/badge/%E2%AC%87%20DOWNLOAD%20ZENITH%20Full%20Version-blue?style=for-the-badge" alt="Download ZENITH Full Version">
+  </a>
+
+  <br><br>
+
+  <a href="https://github.com/dirrzz948-png/Zenith/releases/download/v4.3.1/Zenith.v4.3.1.apk">
+    <strong>Download APK</strong>
+  </a>
+
+</td>
+
+  </tr>
+</table><br>
+
 
 ## Official Download
 
