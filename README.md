@@ -102,7 +102,11 @@ Official APK releases can be generated through automated GitHub Actions workflow
 | <img src="https://cdn.simpleicons.org/xiaohongshu/FF2442" width="16" /> **RedNote**    | Photos / Videos        | <img src="https://cdn.simpleicons.org/threads/000000" width="16" /> **Threads**     | Video / Photos           |
 | <img src="https://cdn.simpleicons.org/bilibili/00A1D6" width="16" /> **Bilibili**      | Video / Audio (DASH)   | <img src="https://cdn.simpleicons.org/pixiv/0096FA" width="16" /> **Pixiv**         | Gallery / Ugoira to MP4  |
 | <img src="https://cdn.simpleicons.org/tiktok/000000" width="16" /> **Douyin**          | Video (No WM) / Photos | <img src="https://cdn.simpleicons.org/bandcamp/1DA1F2" width="16" /> **Bandcamp**   | Album / MP3 Track        |
-           Support me: https://sociabuzz.com/dirrzzx
+
+<a href="https://sociabuzz.com/dirrzzx/support" target="_blank">
+  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="60" />
+</a>
+
 
 «Platform support depends on the current implementation and may change when third-party services modify their systems, APIs, URLs, authentication, or content delivery mechanisms.»
 
@@ -185,7 +189,24 @@ If Android asks for permission to install applications from that source, review 
   <img src="https://raw.githubusercontent.com/dirrzzx948-png/Zenith/main/asset/2.jpg" width="30%">
   <img src="https://raw.githubusercontent.com/dirrzzx948-png/Zenith/main/asset/3.jpg" width="30%">
 </p>
+## Features
 
+- **All-in-One Social Downloader**: Easily save high-definition videos (without watermarks), photos, and music from 14 top platforms: TikTok, Instagram, YouTube, Twitter/X, Spotify, Apple Music, Pinterest, Facebook, Threads, Bandcamp, Pixiv, Bilibili, Douyin, and RedNote.
+- **Smart Multi-Engine Fallback**: Resilient scraper engine with automatic fallback providers to ensure high download success rates even if a provider is temporarily unavailable.
+- **One-Tap Playlist & Album Downloader**: Download entire albums or music playlists from **Spotify**, **Apple Music**, and **YouTube** in one go, no need to download songs one by one.
+- **Quick Save via Share Menu (Android)**: Found a video you like? Tap **Share** in any app and select Zenith to download it immediately in a sleek popup overlay without leaving your current app.
+- **Multi-Link Batch Mode**: Paste several links at once and let Mori analyze and download them all automatically in the background.
+- **Interactive Live Backgrounds & Glassmorphism**: Dynamic animated canvas backgrounds (Constellations, Waves, Particles, Fireflies) paired with modern, customizable frosted glassmorphism effects.
+- **Built-in Media Player & Preview**: Play videos, stream tracks, and view multi-photo galleries right inside the app, with optional Auto-Play and gesture controls.
+- **Instant Photo-to-PDF Export**: Combine multi-photo posts or image galleries into a single, clean PDF file ready for offline reading or sharing.
+- **PIN & Biometric Privacy Lock**: Keep your download history private with a secure 4-digit PIN or fingerprint/Face ID biometric lock.
+- **Smart History & Folder Manager**: View your saved files anytime with clean folder paths (e.g. `Movies/Mori`, `Music/Mori`, `Pictures/Mori`), quick copy paths, and a long-press gesture to easily delete items.
+- **Automatic Clipboard Detection**: Automatically detects copied links when you open the app for instant one-tap downloading.
+- **9 Languages with Full RTL Support**: Fully translated into English, Indonesian, Japanese, Korean, Simplified Chinese, Arabic (with full right-to-left layout), Russian, Tagalog, and Hindi.
+- **Background & Foreground Downloads**: Downloads continue running seamlessly even if you switch apps or minimize Mori, ensuring your videos and large playlists finish downloading without interruption.
+- **Instant Download Cancellation**: Cancel any in-progress download or batch queue with a single tap, instantly stopping network requests and automatically cleaning up partial files.
+- **Corrupt File Protection**: Safe downloads using temporary `.tmp` files that only save to your gallery once 100% complete, preventing broken or unplayable files.
+- **100% Private & Ad-Free**: No tracking, no data collection, no ads, and no external servers. Everything happens directly on your device.
 ---
 
 Usage
