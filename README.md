@@ -144,38 +144,78 @@ The application remains focused on its primary functionality instead of filling 
 Zenith is **100% open-source, ad-free, and contains zero malware, spyware, or trackers**. All network requests and file downloads run locally on your device without external analytics servers.
 
 > [!TIP]
-> **Doubtful or concerned about false-positive security warnings?**  
-> Because Zenith release binaries (`.apk` and `.ipa`) are open-source builds compiled without expensive commercial enterprise signing certificates, some OS security software or browsers may display standard false-positive warnings.
+> **Doubtful or concerned about false-positive security warnings?**
+> Because Zenith release binaries (`.apk`, `.ipa`, and `.exe`) are open-source builds compiled without expensive commercial enterprise signing certificates, some OS security software or browsers may display standard false-positive warnings.
 >
 > If you have any doubts, you can upload and scan any release file directly on **[VirusTotal](https://www.virustotal.com/)** before installing!
 
 > [!NOTE]
-> **Android Play Protect Warning:**  
+> **Android Play Protect Warning:**
 > When installing the `.apk` manually (sideloading outside Google Play Store), Play Protect may display a security prompt.
 >
 > Tap **"More Details"** → **"Install Anyway"** if you trust the source of the APK.
 
 > [!NOTE]
-> **iOS IPA Installation Warning:**  
+> **iOS IPA Installation Warning:**
 > When installing the `.ipa` manually outside the App Store, iOS may require the application to be signed with a valid Apple certificate or installed through a supported sideloading method.
 >
 > If iOS displays a warning or refuses to open the application, verify that the IPA was obtained from a trusted source and that it has been properly signed before installation.
 
-Installation
+> [!NOTE]
+> **Windows Security Warning:**
+> When running or installing the `.exe` manually, Windows Defender SmartScreen may display a security warning if the application is not signed with a trusted commercial code-signing certificate.
+>
+> If Windows displays a warning, verify that the `.exe` was downloaded from the official ZENITH repository before continuing.
 
-Download
+## Installation
+
+### Android
+
+**Download**
 
 Download the latest official APK from the project's GitHub Releases page.
 
-Verify
+**Verify**
 
 Make sure the APK was downloaded from the official ZENITH repository or another officially provided distribution channel.
 
-Install
+**Install**
 
 Open the APK on your Android device and follow the Android installation instructions.
 
 If Android asks for permission to install applications from that source, review the source carefully before continuing.
+
+### iOS
+
+**Download**
+
+Download the latest official IPA from the project's GitHub Releases page.
+
+**Verify**
+
+Make sure the IPA was downloaded from the official ZENITH repository or another officially provided distribution channel.
+
+**Install**
+
+Install the IPA on your iOS device using a supported sideloading method and follow the installation instructions.
+
+If iOS displays a warning or refuses to open the application, verify that the IPA is properly signed and was obtained from a trusted source.
+
+### Windows
+
+**Download**
+
+Download the latest official Windows `.exe` from the project's GitHub Releases page.
+
+**Verify**
+
+Make sure the `.exe` was downloaded from the official ZENITH repository or another officially provided distribution channel.
+
+**Install**
+
+Open the `.exe` on your Windows device and follow the Windows installation instructions.
+
+If Windows Defender SmartScreen displays a security warning, review the file source carefully before continuing.
 
 ## Screenshot
 
