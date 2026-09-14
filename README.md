@@ -1,11 +1,11 @@
 <p align="center">
   <img src="asset/zenith-logo.png" width="140" alt="ZENITH Logo">
 </p><h1 align="center">ZENITH</h1><p align="center">
-  <strong>Minimalist Media Downloader for Android and Ios</strong>
+  <strong>Minimalist Media Downloader for Android/Ios and windows</strong>
 </p><p align="center">
   Simple. Fast. Clean. No Ads.
 </p><p align="center">
-  A lightweight Android media downloader built to keep downloading simple.
+  A lightweight media downloader built to keep downloading simple.
 </p><p align="center">
   <img src="https://img.shields.io/badge/Version-v4.3.1-brown?style=flat-square" alt="Version">
   <img src="https://img.shields.io/github/downloads/coflyn/mori/total?style=flat-square&color=blue" alt="Downloads">
@@ -15,8 +15,9 @@
 >
   <img src="https://img.shields.io/github/repo-size/dirrzzx948-png/Zenith?style=flat-square&color=purple" alt="Repo Size">
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License">
-<img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Platform">
-
+<img src="https://img.shields.io/badge/Android-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Android">
+<img src="https://img.shields.io/badge/iOS-000000?style=flat-square&logo=apple&logoColor=white" alt="iOS">
+<img src="https://img.shields.io/badge/Windows-0078D6?style=flat-square&logo=microsoft&logoColor=white" alt="Windows">
 
   About
 
