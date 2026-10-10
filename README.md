@@ -295,7 +295,7 @@ Please read the license before using, modifying, or redistributing the source co
 ## Official Download
 
 Download the latest official APK from the
-[Releases](https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.3.1) page.
+[Releases](https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.4.0) page.
 
 > Avoid downloading modified or repackaged versions from unofficial sources.
   
