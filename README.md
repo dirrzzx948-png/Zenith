@@ -7,7 +7,7 @@
 </p><p align="center">
   A lightweight media downloader built to keep downloading simple.
 </p><p align="center">
-  <img src="https://img.shields.io/badge/Version-v4.3.1-brown?style=flat-square" alt="Version">
+  <img src="https://img.shields.io/badge/Version-v4.4.0-brown?style=flat-square" alt="Version">
   <img src="https://img.shields.io/github/downloads/coflyn/mori/total?style=flat-square&color=blue" alt="Downloads">
 <img
   src="https://img.shields.io/github/stars/dirrzzx948-png/Zenith?style=flat-square&color=gold&cacheSeconds=300"
