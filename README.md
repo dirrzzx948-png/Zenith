@@ -7,7 +7,7 @@
 </p><p align="center">
   A lightweight media downloader built to keep downloading simple.
 </p><p align="center">
-  <img src="https://img.shields.io/badge/Version-v4.4.0-brown?style=flat-square" alt="Version">
+  <img src="https://img.shields.io/badge/Version-v4.6.0-brown?style=flat-square" alt="Version">
   <img src="https://img.shields.io/github/downloads/coflyn/mori/total?style=flat-square&color=blue" alt="Downloads">
 <img
   src="https://img.shields.io/github/stars/dirrzzx948-png/Zenith?style=flat-square&color=gold&cacheSeconds=300"
@@ -295,7 +295,7 @@ Please read the license before using, modifying, or redistributing the source co
 ## Official Download
 
 Download the latest official APK from the
-[Releases](https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.4.0) page.
+[Releases](https://github.com/dirrzzx948-png/Zenith/releases/tag/v4.6.0) page.
 
 > Avoid downloading modified or repackaged versions from unofficial sources.
   
